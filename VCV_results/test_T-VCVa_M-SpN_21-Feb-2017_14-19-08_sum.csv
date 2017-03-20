@@ -1,0 +1,2 @@
+listener,date,sTime,endTime,TestType,SentType,stimuli,noise,version,finish,uRevs,sdRevs,nRevs,nTrials,uLevs,sdLevs
+test,21-Feb-2017,14:19:08,14:19:12,adaptiveUp,VCV,VCVa,SpNz,HHL,QUIT,,,0,1,999.00, 0.00

@@ -1,0 +1,9 @@
+listener,date,sTime,trial,targets,SNR,adj_SNR,OutLevelChange,masker,wave,V,C,response,correct,rTime,rev
+L99xx,21-Feb-2017,11:15:00,1,VCVa,+999.0,+999.0, +0.0,None,AG_A01a,A,G,G,1,11:15:03
+L99xx,21-Feb-2017,11:15:00,2,VCVa,+999.0,+999.0, +0.0,None,UT_U01a,U,T,T,1,11:15:06
+L99xx,21-Feb-2017,11:15:00,3,VCVa,+999.0,+999.0, +0.0,None,IN_I01a,I,N,N,1,11:15:08
+L99xx,21-Feb-2017,11:15:00,4,VCVa,+999.0,+999.0, +0.0,None,IP_I01a,I,P,P,1,11:15:10
+L99xx,21-Feb-2017,11:15:00,5,VCVa,+999.0,+999.0, +0.0,None,AV_A01a,A,V,W,0,11:15:12
+L99xx,21-Feb-2017,11:15:00,6,VCVa,+999.0,+999.0, +0.0,None,UF_U01a,U,F,F,1,11:15:14
+L99xx,21-Feb-2017,11:15:00,7,VCVa,+999.0,+999.0, +0.0,None,IG_I01a,I,G,G,1,11:15:16
+L99xx,21-Feb-2017,11:15:00,8,VCVa,+999.0,+999.0, +0.0,None,USHU01a,U,SH,SH,1,11:15:19
