@@ -1,10 +1,15 @@
 # VCV Read Me
 
+_under construction_
+
 These MATLAB scripts can be used to test consonant perception in the presence of background noise. 
 
 The target speech consists of vowel-consonant-vowel (VCV) stimuli comprising the consonants 
-/b, d, f, g, k, l, m, n, p, v, w, y, z/ in the context of the vowels /a,i,u/. Note that the consonants
-/t,s,sh/ are not included in this version.
+/b, d, f, g, k, l, m, n, p, v, w, y, z/ in the context of the vowels /a,i,u/. 
+
+Note that in the main branch the consonants /t,s,sh/ are still included. In the branch 
+'without_t_s_sh', those consonants re not included. That's probably what we'll end up using in the end.
+So will at some point turn that into the main branch probably.
 
 The masker is a pre-computed noise waveform. All masker files are assumed to be in the directory 'Maskers'.
 You can find two example maskers in this directory: a speech-shaped noise (SpNz.wav) and a multi-talker babble (IHRBabble.wav).

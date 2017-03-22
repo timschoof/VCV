@@ -1,0 +1,5 @@
+listener,date,sTime,trial,targets,SNR,adj_SNR,OutLevelChange,masker,wave,V,C,response,correct,rTime,rev
+test,22-Mar-2017,14:41:57,1,VCVa,+10.0,+13.0, +0.0,SpNz,AL_A02a,A,L,L,1,14:42:14
+test,22-Mar-2017,14:41:57,2,VCVa,+10.0,+12.0, +0.0,SpNz,IG_I01a,I,G,G,1,14:42:19
+test,22-Mar-2017,14:41:57,3,VCVa,+10.0,+10.0, +0.0,SpNz,IB_I01a,I,B,B,1,14:42:28
+test,22-Mar-2017,14:41:57,4,VCVa,+10.0,+10.0, +0.0,SpNz,AW_A01a,A,W,W,1,14:42:36
