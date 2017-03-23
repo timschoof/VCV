@@ -152,7 +152,6 @@ guidata(h, handles);
 uiresume(handles.figure1);
 
 % Row 3
-
 % --------------------------------------------------------------------
 function varargout = choice42_Callback(h, eventdata, handles, varargin) %P
 % get(handles.choice42, 'String');
@@ -161,49 +160,27 @@ guidata(h, handles);
 uiresume(handles.figure1);
 
 % --------------------------------------------------------------------
-function varargout = choice13_Callback(h, eventdata, handles, varargin) %S
-% get(handles.choice13, 'String');
-handles.response = get(handles.choice13, 'String');
-guidata(h, handles);
-uiresume(handles.figure1);
-
-% --------------------------------------------------------------------
-function varargout = choice23_Callback(h, eventdata, handles, varargin) %SH
-% get(handles.choice23, 'String');
-handles.response = get(handles.choice23, 'String');
-guidata(h, handles);
-uiresume(handles.figure1);
-
-% --------------------------------------------------------------------
-function varargout = choice33_Callback(h, eventdata, handles, varargin) %T
-% get(handles.choice33, 'String');
-handles.response = get(handles.choice33, 'String');
-guidata(h, handles);
-uiresume(handles.figure1);
-
-
-% Row 4
-% --------------------------------------------------------------------
 function varargout = choice43_Callback(h, eventdata, handles, varargin) %V
-% get(handles.choice11, 'String');
+% get(handles.choice43, 'String');
 handles.response = get(handles.choice43, 'String');
 guidata(h, handles);
 uiresume(handles.figure1);
 
 % --------------------------------------------------------------------
 function varargout = choice14_Callback(h, eventdata, handles, varargin) %W
-% get(handles.choice11, 'String');
+% get(handles.choice13, 'String');
 handles.response = get(handles.choice14, 'String');
 guidata(h, handles);
 uiresume(handles.figure1);
 
 % --------------------------------------------------------------------
 function varargout = choice24_Callback(h, eventdata, handles, varargin) %Y
-% get(handles.choice11, 'String');
+% get(handles.choice24, 'String');
 handles.response = get(handles.choice24, 'String');
 guidata(h, handles);
 uiresume(handles.figure1);
 
+% Row 4
 % --------------------------------------------------------------------
 function varargout = choice34_Callback(h, eventdata, handles, varargin) %Z
 % get(handles.choice11, 'String');
