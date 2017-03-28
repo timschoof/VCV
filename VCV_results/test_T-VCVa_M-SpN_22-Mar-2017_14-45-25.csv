@@ -1,0 +1,11 @@
+listener,date,sTime,trial,targets,SNR,adj_SNR,OutLevelChange,masker,wave,V,C,response,correct,rTime,rev
+test,22-Mar-2017,14:45:25,1,VCVa,+10.0,+12.0, +0.0,SpNz,IG_I01a,I,G,G,1,14:45:41
+test,22-Mar-2017,14:45:25,2,VCVa,+10.0,+14.0, +0.0,SpNz,AP_A01a,A,P,P,1,14:45:47
+test,22-Mar-2017,14:45:25,3,VCVa,+10.0, +7.0, +0.0,SpNz,IZ_I01a,I,Z,Z,1,14:45:53
+test,22-Mar-2017,14:45:25,4,VCVa,+10.0,+10.0, +0.0,SpNz,UY_U01a,U,Y,Y,1,14:45:59
+test,22-Mar-2017,14:45:25,5,VCVa,+10.0,+13.0, +0.0,SpNz,UL_U02a,U,L,L,1,14:46:04
+test,22-Mar-2017,14:45:25,6,VCVa,+10.0, +8.0, +0.0,SpNz,AG_A01a,A,G,G,1,14:46:10
+test,22-Mar-2017,14:45:25,7,VCVa,+10.0,+14.0, +0.0,SpNz,AB_A01a,A,B,B,1,14:46:15
+test,22-Mar-2017,14:45:25,8,VCVa,+10.0,+10.0, +0.0,SpNz,IM_I01a,I,M,M,1,14:46:21
+test,22-Mar-2017,14:45:25,9,VCVa,+10.0, +6.0, +0.0,SpNz,UK_U01a,U,K,K,1,14:46:26
+test,22-Mar-2017,14:45:25,10,VCVa,+10.0,+14.0, +0.0,SpNz,UN_U01a,U,N,N,1,14:46:32

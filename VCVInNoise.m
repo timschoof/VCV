@@ -26,9 +26,9 @@ rng('shuffle');
 warning('off', 'MATLAB:fileparts:VersionToBeRemoved')
 
 %% get essential information for running a test
-[TestType, ear, TargetDirectory, NoiseFile, SNR_dB, OutFile, Reps, ListName, MIN_change_dB,...
+[TestType, ear, TargetDirectory, NoiseFile, SNR_dB, OutFile, Reps, MIN_change_dB,...
     ~, ~, Session, Train, SNR_adj_file,VolumeSettingsFile] = VCVTestSpecs(mInputArgs);
-TargetType = upper(TargetDirectory([1:3]));
+ TargetType = upper(TargetDirectory([1:3]));
 if strcmp(TestType,'fixed')
     START_change_dB = 0;
     MIN_change_dB = 0;
@@ -69,25 +69,6 @@ Info.SoundWaveLevel = SoundWaveLevel;
 Info.InRMS = InRMS;
 Info.OutRMS = OutRMS;
 
-%% read in the list of stimuli as a cell array    
-if ~strcmp(ListName(end-3:end), '.txt')
-    ListName = [ListName '.txt'];
-end
-
-fid = fopen(ListName);
-C = textscan(fid, '%s');
-fclose(fid);
-
-%%-- convert to strings --%%
-stim_list = char(C{1}); % remember to deblank when reading in to play
-
-%%-- Include the repetitions in the stimulus list --%%
-full_stim_list = [];
-
-for n=1:Reps
-    full_stim_list = [full_stim_list; stim_list];
-end
-
 %% create output files
 status = mkdir(OutputDir);
 if status==0 
@@ -126,11 +107,18 @@ else
     fclose(fid);
 end
 
-%% calculate the number of trials to be performed %%
-n_trials = size(stim_list,1) * Reps;
+%% Generate a random order in which to play the stimuli %%
+for i=1:Reps
+    order = VCVorder(TargetDirectory);
+    if i == 1
+        trial_order = order;
+    else
+        trial_order = [trial_order, order];
+    end
+end
 
-%%-- Generate a random order in which to play the stimuli --%%
-trial_order = randperm(n_trials);
+% calculate the number of trials to be performed %
+n_trials = size(trial_order,1);
 
 % reduce number of trials if practice run
 if strcmpi(ListenerName(1),'p')
@@ -185,8 +173,9 @@ while (num_turns<FINAL_TURNS  && limit<=MaxBumps && trial<n_trials)
    trial = trial+1;
    nWavSection=nWavSection+1;
    
-   InFile = deblank(full_stim_list(trial_order(trial),:));
-   StimulusFile = fullfile(TargetDirectory, [InFile '.wav']);
+%    InFile = deblank(full_stim_list(trial_order(trial),:));
+   InFile = trial_order(trial).wave;
+   StimulusFile = fullfile(TargetDirectory, InFile);
 
    %% identify the target consonant from the file name
    pos = strfind(InFile, '_');
