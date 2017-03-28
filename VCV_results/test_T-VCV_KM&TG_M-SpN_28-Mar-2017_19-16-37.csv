@@ -1,0 +1,3 @@
+listener,date,sTime,trial,targets,SNR,adj_SNR,OutLevelChange,masker,wave,V,C,response,correct,rTime,rev
+test,28-Mar-2017,19:16:37,1,VCV_KM&TG,-10.0,-10.0, +0.0,SpNz44100,AF_A01_KM.wav,A,F,W,0,19:17:01
+test,28-Mar-2017,19:16:37,2,VCV_KM&TG, +0.0, +0.0, +0.0,SpNz44100,AY_A03_KM.wav,A,Y,W,0,19:17:04

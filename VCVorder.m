@@ -44,7 +44,7 @@ for s=1:size(speakers')
             end   % found an unplayed file
             AllFiles(numbers(n).order).played=1;
             % construct the file name, and save away any further information
-            tmp(i).wave=[vowels{v} consonants{c} vowels{v} numbers(n).number '_' speakers{s} '.wav' ];
+            tmp(i).wave=[vowels{v} consonants{c} vowels{v} numbers(n).number '_' speakers{s} ];
             tmp(i).vowel=vowels{v};
             tmp(i).consonant=consonants{c};
             tmp(i).speaker = speakers{s};

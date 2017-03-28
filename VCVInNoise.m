@@ -26,8 +26,12 @@ rng('shuffle');
 warning('off', 'MATLAB:fileparts:VersionToBeRemoved')
 
 %% get essential information for running a test
-[TestType, ear, TargetDirectory, NoiseFile, SNR_dB, OutFile, Reps, MIN_change_dB,...
+% [TestType, ear, TargetDirectory, NoiseFile, SNR_dB, OutFile, Reps, MIN_change_dB,...
+%     ~, ~, Session, Train, SNR_adj_file,VolumeSettingsFile] = VCVTestSpecs(mInputArgs);
+
+[TestType, ear, TargetDirectory, NoiseFile, SNR_dB, OutFile, Reps, ListName, MIN_change_dB,...
     ~, ~, Session, Train, SNR_adj_file,VolumeSettingsFile] = VCVTestSpecs(mInputArgs);
+
  TargetType = upper(TargetDirectory([1:3]));
 if strcmp(TestType,'fixed')
     START_change_dB = 0;
@@ -118,7 +122,7 @@ for i=1:Reps
 end
 
 % calculate the number of trials to be performed %
-n_trials = size(trial_order,1);
+n_trials = size(trial_order,2);
 
 % reduce number of trials if practice run
 if strcmpi(ListenerName(1),'p')

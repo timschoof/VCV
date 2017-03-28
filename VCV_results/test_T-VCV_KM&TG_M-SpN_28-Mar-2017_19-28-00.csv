@@ -1,0 +1,11 @@
+listener,date,sTime,trial,targets,SNR,adj_SNR,OutLevelChange,masker,wave,V,C,response,correct,rTime,rev
+test,28-Mar-2017,19:28:00,1,VCV_KM&TG, -5.0, -1.5, +0.0,SpNz44100,AM_A02_KM,A,M,N,0,19:28:04
+test,28-Mar-2017,19:28:00,2,VCV_KM&TG, -5.0, -6.8, +0.0,SpNz44100,IL_I03_TG,I,L,B,0,19:28:07
+test,28-Mar-2017,19:28:00,3,VCV_KM&TG, -5.0, +1.8, +0.0,SpNz44100,ID_I04_KM,I,D,D,1,19:28:09
+test,28-Mar-2017,19:28:00,4,VCV_KM&TG, -5.0, -7.9, +0.0,SpNz44100,IV_I02_KM,I,V,V,1,19:28:12
+test,28-Mar-2017,19:28:00,5,VCV_KM&TG, -5.0,-13.5, +0.0,SpNz44100,IF_I04_KM,I,F,V,0,19:28:15
+test,28-Mar-2017,19:28:00,6,VCV_KM&TG, -5.0, -0.4, +0.0,SpNz44100,UP_U04_KM,U,P,P,1,19:28:17
+test,28-Mar-2017,19:28:00,7,VCV_KM&TG, -5.0, +0.2, +0.0,SpNz44100,IZ_I02_TG,I,Z,Z,1,19:28:20
+test,28-Mar-2017,19:28:00,8,VCV_KM&TG, -5.0, -4.6, +0.0,SpNz44100,IG_I02_KM,I,G,G,1,19:28:23
+test,28-Mar-2017,19:28:00,9,VCV_KM&TG, -5.0, -4.1, +0.0,SpNz44100,IW_I01_KM,I,W,V,0,19:28:26
+test,28-Mar-2017,19:28:00,10,VCV_KM&TG, -5.0, -5.0, +0.0,SpNz44100,IM_I04_KM,I,M,M,1,19:28:28

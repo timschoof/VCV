@@ -7,3 +7,6 @@ Date,Time,Listener,Session,Sentences,Masker,SRT,Std_Dev
 21-Feb-2017,14:19:08,e,0,VCVa,SpNz,999.0,  0.0
 21-Feb-2017,14:19:31,e,0,VCVa,SpNz,999.0,  0.0
 22-Mar-2017,17:53:09,e,0,VCVa,SpNz, -2.3,  3.9
+28-Mar-2017,19:14:37,e,0,VCV_KM&TG,SpNz44100,999.0,  0.0
+28-Mar-2017,19:16:37,e,0,VCV_KM&TG,SpNz44100,999.0,  0.0
+28-Mar-2017,19:22:32,e,0,VCV_KM&TG,SpNz44100, -4.3,  3.6
