@@ -1,2 +1,0 @@
-listener,date,sTime,endTime,TestType,SentType,stimuli,noise,version,SNR,nCorrect,nKW,pCorrect
-L99xx,21-Feb-2017,10:57:43,10:58:14,fixed,VCV,VCVa,None,HHL,999,8,10,0.800000
