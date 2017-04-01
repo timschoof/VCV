@@ -14,7 +14,7 @@ NoiseRiseFall = 200;                  Info.NoiseRiseFall = NoiseRiseFall;
 OutputDir = 'VCV_results';
 MAX_SNR_dB = 15;    
 PermuteMaskerWave = 0;      % minimise repeated playing of sections of masker wav
-START_change_dB = -10.0;   
+START_change_dB = 10.0;   
 MIN_change_dB = 3.0;
 INITIAL_TURNS = 2;   % need one for the initial sentence up from the bottom if adaptiveUp
 FINAL_TURNS = 8;   
