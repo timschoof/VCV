@@ -49,17 +49,16 @@ If you wanted to run the test from the gui after all, just run VCVInNoise.m and 
  - VolumeSettings: text file that specifies volume settings, if left unspecified the default is VolumeSettings.txt 
  
 There are some additional parameters in the VCVInNoise.m script (at the top):
-warning_noise_duration = 500;  % noise starts e.g. 500 ms before the stimulus  
-NoiseRiseFall = 200;     % Noise is tapered on and off across 200 ms
-OutputDir = 'VCV_results'; % name of output directory (for results files)
-MAX_SNR_dB = 15;    % maximum SNR (dB)
-PermuteMaskerWave = 0;      % minimise repeated playing of sections of masker wav
-START_change_dB = 10.0;   % intial step size (dB)
-MIN_change_dB = 3.0; % final step size (dB)
-INITIAL_TURNS = 2;   % need one for the initial sentence up from the bottom if adaptiveUp
-FINAL_TURNS = 8;   % number of reversals after which run terminates
-MaxBumps = 3;  % run terminates after e.g. 3 trials were presented at maximum SNR
-
+ - warning_noise_duration = 500;  % noise starts e.g. 500 ms before the stimulus  
+ - NoiseRiseFall = 200;     % Noise is tapered on and off across 200 ms
+ - OutputDir = 'VCV_results'; % name of output directory (for results files)
+ - MAX_SNR_dB = 15;    % maximum SNR (dB)
+ - PermuteMaskerWave = 0;      % minimise repeated playing of sections of masker wav
+ - START_change_dB = 10.0;   % intial step size (dB)
+ - MIN_change_dB = 3.0; % final step size (dB)
+ - INITIAL_TURNS = 2;   % need one for the initial sentence up from the bottom if adaptiveUp
+ - FINAL_TURNS = 8;   % number of reversals after which run terminates
+ - MaxBumps = 3;  % run terminates after e.g. 3 trials were presented at maximum SNR
 
 ## Specifying default settings
 
