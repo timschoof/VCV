@@ -19,6 +19,7 @@ MIN_change_dB = 3.0;
 INITIAL_TURNS = 2;   % need one for the initial sentence up from the bottom if adaptiveUp
 FINAL_TURNS = 8;   
 MaxBumps = 3;    
+tracking = 50; % tracking 50% or 71% correct
 mInputArgs = varargin;
 
 % initialise the random number generator
@@ -97,7 +98,7 @@ OutFile = fullfile(OutputDir, [FileListenerName '.csv']);
 SummaryOutFile = fullfile(OutputDir, [FileListenerName '_sum.csv']);
 % write some headings and preliminary information to the output file
 fout = fopen(OutFile, 'at');
-fprintf(fout, 'listener,date,sTime,trial,targets,SNR,adj_SNR,OutLevelChange,masker,wave,V,C,response,correct,rTime,rev');
+fprintf(fout, 'listener,date,sTime,tracking,trial,targets,SNR,adj_SNR,OutLevelChange,masker,wave,V,C,response,correct,rTime,rev');
 fclose(fout);
 
 %% check whether results summary file has been left open and if so quit *** use CheckOpenFile?
@@ -159,7 +160,13 @@ nWavSection = 0;
 totalCorrect = 0;
 
 criterion = 1; % number of correct answers before change - one till first reversal
-final_criterion = 2;
+if tracking == 50
+    final_criterion = 1;
+elseif tracking == 71
+    final_criterion = 2; 
+else
+    error('Only tracking of 50% or 71% implemented')
+end
 correct_count = 0;
 reversals = zeros(1,n_trials);
 levels_visited = zeros(1,n_trials);
@@ -263,8 +270,8 @@ while (num_turns<FINAL_TURNS  && limit<=MaxBumps && trial<n_trials)
    fout = fopen(OutFile, 'at');
    % print out relevant information
 % fprintf(fout, 'listener,date,sTime,trial,targets,SNR,adj_SNR,OutLevelChange,masker,wave,V,C,response,correct,rTime,rev');
-   fprintf(fout, '\n%s,%s,%s,%d,%s,%+5.1f,%+5.1f,%+5.1f,%s,%s,%s,%s,%s,%d,%s', ...
-       ListenerName,StartDate,StartTimeString,trial,TargetDirectory,nominal_SNR_dB,SNR_dB,...
+   fprintf(fout, '\n%s,%s,%s,%d,%d,%s,%+5.1f,%+5.1f,%+5.1f,%s,%s,%s,%s,%s,%d,%s', ...
+       ListenerName,StartDate,StartTimeString,tracking,trial,TargetDirectory,nominal_SNR_dB,SNR_dB,...
        OutLevelChange,NoiseFileName,InFile,InFile(1),consonant,response,correct,TimeOfResponse);
    
    %% feedback here if training
@@ -335,13 +342,13 @@ EndTimeString=sprintf('%02d:%02d:%02d',EndTime(4),EndTime(5),EndTime(6));
 
 %% output summary statistics
 fout = fopen(SummaryOutFile, 'at');
-fprintf(fout, 'listener,date,sTime,endTime,TestType,SentType,stimuli,noise,version');
+fprintf(fout, 'listener,date,sTime,endTime,TestType,tracking,SentType,stimuli,noise,version');
 % adaptive procedures
 if ~strcmp(TestType,'fixed')
     fprintf(fout, ',finish,uRevs,sdRevs,nRevs,nTrials,uLevs,sdLevs');
-    fprintf(fout, '\n%s,%s,%s,%s,%s,%s,%s,%s,%s', ...
+    fprintf(fout, '\n%s,%s,%s,%s,%s,%d,%s,%s,%s,%s', ...
         ListenerName,StartDate,StartTimeString,EndTimeString,...
-        TestType,TargetType,TargetDirectory,NoiseFileName,VERSION);
+        TestType,tracking,TargetType,TargetDirectory,NoiseFileName,VERSION);
     
     % print out summary statistics -- how did we get here?
     if (limit>=3) % bumped up against the limits
@@ -394,10 +401,10 @@ if ~strcmpi(ListenerName(1),'p')  && ~strcmpi(Train, 'train')
     fsum = fopen(csv_summary, 'at');
     if strcmpi(TestType, 'Fixed')
         fprintf(fsum, '%s,%s,%s,%s,%s,%s,%g,%d,%d,%4.3f\n', ...
-            StartDate,StartTimeString,ListenerName(2:end-2),Session,TargetDirectory,NoiseFileName,nominal_SNR_dB,totalCorrect,trial,totalCorrect/trial); 
+            StartDate,StartTimeString,ListenerName,Session,TargetDirectory,NoiseFileName,nominal_SNR_dB,totalCorrect,trial,totalCorrect/trial); 
     else
-        fprintf(fsum, '%s,%s,%s,%s,%s,%s,%5.1f,%5.1f\n', ... 
-            StartDate,StartTimeString,ListenerName(2:end-2),Session,TargetDirectory,NoiseFileName,mean_revs,sd_revs);
+        fprintf(fsum, '%s,%s,%s,%d,%s,%s,%s,%5.1f,%5.1f\n', ... 
+            StartDate,StartTimeString,ListenerName,tracking,Session,TargetDirectory,NoiseFileName,mean_revs,sd_revs);
     end
     fclose(fsum);
 end

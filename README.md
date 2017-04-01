@@ -13,7 +13,7 @@ You can find three example maskers in this directory: a speech-shaped noise (SpN
 with sampling rates of 22050 and 44100 Hz respectively) and a multi-talker babble (IHRBabble.wav).
 
 You can run the VCV in noise test either at a fixed signal-to-noise ratio (SNR) or adaptively (tracking
-the speech reception threshold (SRT) at 50% correct). VCVs can also be tested in quiet, by testing at a
+the speech reception threshold (SRT) at 50% or 71% correct). VCVs can also be tested in quiet, by testing at a
 fixed SNR of 999 dB. 
 
 In addition, you can make adjustments for individual consonants in terms of the SNR. Some consonants 
@@ -58,7 +58,8 @@ There are some additional parameters in the VCVInNoise.m script (at the top):
  - MIN_change_dB = 3.0; % final step size (dB)
  - INITIAL_TURNS = 2;   % need one for the initial sentence up from the bottom if adaptiveUp
  - FINAL_TURNS = 8;   % number of reversals after which run terminates
- - MaxBumps = 3;  % run terminates after e.g. 3 trials were presented at maximum SNR
+ - tracking = 71; % tracking 50% or 71% correct
+ - MaxBumps = 3;  % run terminates after e.g. 3 trials were presented at maximum SNR (and participant gets it wrong every time)
 
 ## Specifying default settings
 

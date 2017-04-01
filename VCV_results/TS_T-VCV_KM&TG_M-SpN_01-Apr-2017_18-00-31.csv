@@ -1,0 +1,5 @@
+listener,date,sTime,trial,targets,SNR,adj_SNR,OutLevelChange,masker,wave,V,C,response,correct,rTime,rev
+TS,01-Apr-2017,18:00:31,1,VCV_KM&TG, +6.0,+11.7, +0.0,SpNz44100,UL_U03_KM,U,L,M,0,18:00:38
+TS,01-Apr-2017,18:00:31,2,VCV_KM&TG,+15.0,+12.9, +0.0,SpNz44100,AL_A02_TG,A,L,W,0,18:00:42
+TS,01-Apr-2017,18:00:31,3,VCV_KM&TG,+15.0,+11.5, +0.0,SpNz44100,AM_A04_KM,A,M,K,0,18:00:47
+TS,01-Apr-2017,18:00:31,4,VCV_KM&TG,+15.0,+12.1, +0.0,SpNz44100,AF_A01_TG,A,F,K,0,18:00:52
