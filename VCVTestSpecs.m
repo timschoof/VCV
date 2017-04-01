@@ -96,9 +96,15 @@ if length(varargin{1})>1
         elseif strcmpi('SNR', varargin{1}(index))
             set(handles.StartLevel,'String',num2str(cell2mat(varargin{1}(index+1))));
         elseif strcmpi('Channels', varargin{1}(index))
-            set(handles.Channels_edit,'String',num2str(cell2mat(varargin{1}(index+1))));
-        elseif strcmpi('Shift', varargin{1}(index))
-            set(handles.Shift_edit,'String',num2str(cell2mat(varargin{1}(index+1))));            
+            set(handles.Channels_edit,'String',char(varargin{1}(index+1)));
+        elseif strcmpi('ear', (varargin{1}(index)))
+            if strcmpi(char(upper(varargin{1}(index+1))),'B')
+                set(handles.Both, 'Value', 1)
+            elseif strcmpi(char(upper(varargin{1}(index+1))),'L')
+                set(handles.Left, 'Value', 1)    
+            elseif strcmpi(char(upper(varargin{1}(index+1))),'R')
+                set(handles.Right, 'Value', 1)                         
+            end         
         elseif strcmpi('TestType', varargin{1}(index))
             if strcmpi('adaptiveUp', char(varargin{1}(index+1)))
                 set(handles.AdaptiveUp,'Value',1);
