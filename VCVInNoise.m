@@ -31,7 +31,7 @@ warning('off', 'MATLAB:fileparts:VersionToBeRemoved')
 %     ~, ~, Session, Train, SNR_adj_file,VolumeSettingsFile] = VCVTestSpecs(mInputArgs);
 
 [TestType, ear, TargetDirectory, NoiseFile, SNR_dB, OutFile, Reps, ListName, MIN_change_dB,...
-    ~, ~, Session, Train, SNR_adj_file,VolumeSettingsFile] = VCVTestSpecs(mInputArgs);
+    ~, ~, Session, Train, SNR_adj_file,VolumeSettingsFile,ITD,side] = VCVTestSpecs(mInputArgs);
 
  TargetType = upper(TargetDirectory([1:3]));
 if strcmp(TestType,'fixed')
@@ -233,8 +233,28 @@ while (num_turns<FINAL_TURNS  && limit<=MaxBumps && trial<n_trials)
        end
        
        % combine the signal and masker
-       [y,Fs,~,~,~,OutLevelChange] = add_noise(StimulusFile, NoiseFile, MaskerWavStart, SNR_dB, 0, ...
+       [y,Fs,~,sigAlone,noiseAlone,OutLevelChange] = add_noise(StimulusFile, NoiseFile, MaskerWavStart, SNR_dB, 0, ...
                  'noise', InRMS, OutRMS, warning_noise_duration, NoiseRiseFall);
+       
+       % if required, apply crude spatialization (based on overall ITD)
+       if ~ITD==0 % if ITD is to be applied (i.e. is not zero)
+           % create lagging and leading noise
+           noise_lead = [noiseAlone; zeros(round(((ITD*Fs)/10^6)),1)];
+           noise_lag = [zeros(round(((ITD*Fs)/10^6)),1); noiseAlone]; % NB: ITD is in microseconds
+           % equate length of sigAlone with that of noises by adding zeros at the end
+           sig_front = [sigAlone; zeros(round(((ITD*Fs)/10^6)),1)];
+           % combine sig & noise
+           lead = sig_front + noise_lead;
+           lag = sig_front + noise_lag;
+           % position noise on the left or right
+           if strcmp(side,'left')
+               y = [lead,lag];
+           elseif strcmp(side,'right')
+               y = [lag,lead];
+           else
+               error('side should be left or right')
+           end
+       end
              
        if PermuteMaskerWave % keep track of masker sections used
            if nWavSection==nSections
@@ -245,13 +265,15 @@ while (num_turns<FINAL_TURNS  && limit<=MaxBumps && trial<n_trials)
    end
     
    % make a silent contralateral noise for monaural presentations
-   ContraNoise = zeros(size(y));
-   % determine the ear(s) to play out the stimuli
-   switch upper(ear)
-        case 'L', y = [y ContraNoise];
-        case 'R', y = [ContraNoise y];
-        case 'B', y = [y y];        
-        otherwise error('variable ear must be one of L, R or B')
+   if ITD==0 % if no ITD is applied
+       ContraNoise = zeros(size(y));
+       % determine the ear(s) to play out the stimuli
+       switch upper(ear)
+            case 'L', y = [y ContraNoise];
+            case 'R', y = [ContraNoise y];
+            case 'B', y = [y y];        
+            otherwise error('variable ear must be one of L, R or B')
+       end
    end
    
    %% collect response

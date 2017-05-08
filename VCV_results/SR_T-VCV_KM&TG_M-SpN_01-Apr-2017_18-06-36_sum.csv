@@ -1,2 +1,0 @@
-listener,date,sTime,endTime,TestType,SentType,stimuli,noise,version,finish,uRevs,sdRevs,nRevs,nTrials,uLevs,sdLevs
-SR,01-Apr-2017,18:06:36,18:08:27,adaptiveDown,VCV,VCV_KM&TG,SpNz44100,HHL,OK,-1.00, 1.85,8,30,-0.82, 1.59
