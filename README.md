@@ -28,7 +28,8 @@ Therefore, it is probably best to run this from the command line entirely.
 
 To run the test, type something like this:
 
-VCVInNoise('SNR_adj_file', 'VCV_adjust_SNR_KM&TG.csv','Listener','test','NoiseFile','SpNz44100.wav','TestType')
+VCVInNoise('SNR_adj_file', 'VCV_adjust_SNR_KM&TG.csv','SNR', 6, ...
+'Listener','TS','NoiseFile','SpNz44100.wav','ITD_us','650','itd_invert','ITD','lateralize','noise','ear','b','TestType','adaptiveDown')
 
 If you wanted to run the test from the gui after all, just run VCVInNoise.m and the gui pops up. 
 
@@ -47,6 +48,9 @@ If you wanted to run the test from the gui after all, just run VCVInNoise.m and 
  - SNR_adj_file: csv file with SNR adjustment levels
  - OutFile: name of output file, this is constructed later on so perhaps best not to specify this here
  - VolumeSettings: text file that specifies volume settings, if left unspecified the default is VolumeSettings.txt 
+ - itd_invert: 'ITD' will apply and interaural time difference, 'inverted' will flip the polarity in one ear, or 'none' does neither
+ - lateralize: inverts or applies ITD to either the 'signal' alone, the 'noise' alone, or both ('signz')
+ - ITD_us: ITD in microseconds
  
 There are some additional parameters in the VCVInNoise.m script (at the top):
  - warning_noise_duration = 500;  % noise starts e.g. 500 ms before the stimulus  

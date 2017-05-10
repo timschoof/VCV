@@ -1,5 +1,5 @@
 function VCVInNoise(varargin)
-% % Run VCV in noise either fixed or adaptively, 
+% % Run VCV in noise either fixed or adaptively,
 %   using a pre-computed noise waveform
 %
 % All masker files are assumed to be in the directory 'Maskers'
@@ -12,13 +12,13 @@ VERSION = 'HHL';
 warning_noise_duration = 500;         Info.warning_noise_duration = warning_noise_duration;
 NoiseRiseFall = 200;                  Info.NoiseRiseFall = NoiseRiseFall;
 OutputDir = 'VCV_results';
-MAX_SNR_dB = 15;    
+MAX_SNR_dB = 15;
 PermuteMaskerWave = 0;      % minimise repeated playing of sections of masker wav
-START_change_dB = 10.0;   
+START_change_dB = 10.0;
 MIN_change_dB = 3.0;
 INITIAL_TURNS = 2;   % need one for the initial sentence up from the bottom if adaptiveUp
-FINAL_TURNS = 8;   
-MaxBumps = 3;    
+FINAL_TURNS = 8;
+MaxBumps = 3;
 tracking = 50; % tracking 50% or 71% correct
 mInputArgs = varargin;
 
@@ -31,13 +31,13 @@ warning('off', 'MATLAB:fileparts:VersionToBeRemoved')
 %     ~, ~, Session, Train, SNR_adj_file,VolumeSettingsFile] = VCVTestSpecs(mInputArgs);
 
 [TestType, ear, TargetDirectory, NoiseFile, SNR_dB, OutFile, Reps, ListName, MIN_change_dB,...
-    ~, ~, Session, Train, SNR_adj_file,VolumeSettingsFile,ITD,side] = VCVTestSpecs(mInputArgs);
+    Session, Train, SNR_adj_file,VolumeSettingsFile,itd_invert,lateralize,ITD_us] = VCVTestSpecs(mInputArgs);
 
- TargetType = upper(TargetDirectory([1:3]));
+TargetType = upper(TargetDirectory([1:3]));
 if strcmp(TestType,'fixed')
     START_change_dB = 0;
     MIN_change_dB = 0;
-%     FINAL_TURNS = MaxTrials;
+    %     FINAL_TURNS = MaxTrials;
     MAX_SNR_dB = 99;
     csv_summary = 'VCV_summary_fixed.csv';
 else
@@ -76,8 +76,8 @@ Info.OutRMS = OutRMS;
 
 %% create output files
 status = mkdir(OutputDir);
-if status==0 
-  error('Cannot create new output directory for results: %s', OutputDir);
+if status==0
+    error('Cannot create new output directory for results: %s', OutputDir);
 end
 
 % get the starting date & time of the session
@@ -93,12 +93,18 @@ StartDate = date;
 [~, NoiseFileName, ext] = fileparts(NoiseFile);
 
 % put method, date and time on filenames so as to ensure a single file per test
-FileListenerName=[ListenerName '_T-' TargetDirectory '_M-' NoiseFileName(1:3) '_' StartDate '_' FileNamingStartTime];
+if strcmp(itd_invert,'ITD')
+    FileListenerName=[ListenerName '_T-' TargetDirectory '_M-' NoiseFileName(1:3) '_' num2str(ITD_us) 'us_' itd_invert '_' lateralize '_' StartDate '_' FileNamingStartTime];
+elseif strcmp(itd_invert,'inverted')
+    FileListenerName=[ListenerName '_T-' TargetDirectory '_M-' NoiseFileName(1:3) '_' itd_invert '_' lateralize '_' StartDate '_' FileNamingStartTime];
+elseif strcmp(itd_invert,'none')
+    FileListenerName=[ListenerName '_T-' TargetDirectory '_M-' NoiseFileName(1:3) '_' itd_invert '_' StartDate '_' FileNamingStartTime];
+end
 OutFile = fullfile(OutputDir, [FileListenerName '.csv']);
 SummaryOutFile = fullfile(OutputDir, [FileListenerName '_sum.csv']);
 % write some headings and preliminary information to the output file
 fout = fopen(OutFile, 'at');
-fprintf(fout, 'listener,date,sTime,tracking,trial,targets,SNR,adj_SNR,OutLevelChange,masker,wave,V,C,response,correct,rTime,rev');
+fprintf(fout, 'listener,date,sTime,tracking,trial,targets,SNR,adj_SNR,OutLevelChange,manipulation,lateralized,ITD,masker,wave,V,C,response,correct,rTime,rev');
 fclose(fout);
 
 %% check whether results summary file has been left open and if so quit *** use CheckOpenFile?
@@ -144,7 +150,7 @@ Info.time = FileNamingStartTime;
 InfoFileName = fullfile('VCV Test Logs',['VCV_Tests' Info.date '_' Info.time '_' ListenerName '_test_param.csv']);
 writetable(struct2table(Info),InfoFileName);
 
-%% setup a few starting values 
+%% setup a few starting values
 if strcmp(TestType,'adaptiveUp')
     previous_change = 1; % assume track is initially moving from hard to easy
 else
@@ -163,7 +169,7 @@ criterion = 1; % number of correct answers before change - one till first revers
 if tracking == 50
     final_criterion = 1;
 elseif tracking == 71
-    final_criterion = 2; 
+    final_criterion = 2;
 else
     error('Only tracking of 50% or 71% implemented')
 end
@@ -180,180 +186,232 @@ pause(1);
 nominal_SNR_dB = SNR_dB;
 
 %% run the test (do adaptive tracking until stop criterion)
-while (num_turns<FINAL_TURNS  && limit<=MaxBumps && trial<n_trials) 
-   trial = trial+1;
-   nWavSection=nWavSection+1;
-   
-%    InFile = deblank(full_stim_list(trial_order(trial),:));
-   InFile = trial_order(trial).wave;
-   StimulusFile = fullfile(TargetDirectory, InFile);
-
-   %% identify the target consonant from the file name
-   pos = strfind(InFile, '_');
-   if isempty(pos)
-       consonant = InFile(2:3);
-   else
-       consonant = InFile(2);
-   end
-
-   if strcmpi(NoiseFileName, 'none')
-       
-       [y, Fs] = audioread(StimulusFile);
-       OutLevelChange = 0;
-       % check if stereo -- if so, take only one channel
-       if size(y,2)>1
-           y = y(:,1);
-       end
-       
-       % *** should allow for InRMS here also?
-       if OutRMS
-           y = y*OutRMS/rms(y);
-       end
-       
-       % apply 50 ms cosine rise and fall
-       y = NewTaper(y,50,50,Fs);
-       
-   else
-       % May 2009 -- different function for adding noise
-       if PermuteMaskerWave % keep track of masker sections used
-           MaskerWavStart = wavSections(nWavSection);
-       else
-           MaskerWavStart = -1;
-       end
-       
-       if ~strcmpi(SNR_adj_file, 'none')
-           SNR_Adjustment = FindSNR_Adjustment(C_Adjust, InFile);
-           if ~isempty(SNR_Adjustment)
-               SNR_dB = nominal_SNR_dB + SNR_Adjustment;
-%                fprintf('%g\n', SNR_dB);
-           else
-               SNR_dB = nominal_SNR_dB;
-               fprintf('WARNING! - SNR Adjustment. File name not found in list.\n');
-           end
-       end
-       
-       % combine the signal and masker
-       [y,Fs,~,sigAlone,noiseAlone,OutLevelChange] = add_noise(StimulusFile, NoiseFile, MaskerWavStart, SNR_dB, 0, ...
-                 'noise', InRMS, OutRMS, warning_noise_duration, NoiseRiseFall);
-       
-       % if required, apply crude spatialization (based on overall ITD)
-       if ~ITD==0 % if ITD is to be applied (i.e. is not zero)
-           % create lagging and leading noise
-           noise_lead = [noiseAlone; zeros(round(((ITD*Fs)/10^6)),1)];
-           noise_lag = [zeros(round(((ITD*Fs)/10^6)),1); noiseAlone]; % NB: ITD is in microseconds
-           % equate length of sigAlone with that of noises by adding zeros at the end
-           sig_front = [sigAlone; zeros(round(((ITD*Fs)/10^6)),1)];
-           % combine sig & noise
-           lead = sig_front + noise_lead;
-           lag = sig_front + noise_lag;
-           % position noise on the left or right
-           if strcmp(side,'left')
-               y = [lead,lag];
-           elseif strcmp(side,'right')
-               y = [lag,lead];
-           else
-               error('side should be left or right')
-           end
-       end
-             
-       if PermuteMaskerWave % keep track of masker sections used
-           if nWavSection==nSections
-               nWavSection = 0;
-               [nSections, wavSections] = GenerateWavSections(NoiseFile, MaxDurTargetSamples);
-           end
-       end
-   end
+while (num_turns<FINAL_TURNS  && limit<=MaxBumps && trial<n_trials)
+    trial = trial+1;
+    nWavSection=nWavSection+1;
     
-   % make a silent contralateral noise for monaural presentations
-   if ITD==0 % if no ITD is applied
-       ContraNoise = zeros(size(y));
-       % determine the ear(s) to play out the stimuli
-       switch upper(ear)
+    %    InFile = deblank(full_stim_list(trial_order(trial),:));
+    InFile = trial_order(trial).wave;
+    StimulusFile = fullfile(TargetDirectory, InFile);
+    
+    %% identify the target consonant from the file name
+    pos = strfind(InFile, '_');
+    if isempty(pos)
+        consonant = InFile(2:3);
+    else
+        consonant = InFile(2);
+    end
+    
+    if strcmpi(NoiseFileName, 'none')
+        
+        [y, Fs] = audioread(StimulusFile);
+        OutLevelChange = 0;
+        % check if stereo -- if so, take only one channel
+        if size(y,2)>1
+            y = y(:,1);
+        end
+        
+        % *** should allow for InRMS here also?
+        if OutRMS
+            y = y*OutRMS/rms(y);
+        end
+        
+        % apply 50 ms cosine rise and fall
+        y = NewTaper(y,50,50,Fs);
+        
+    else
+        % May 2009 -- different function for adding noise
+        if PermuteMaskerWave % keep track of masker sections used
+            MaskerWavStart = wavSections(nWavSection);
+        else
+            MaskerWavStart = -1;
+        end
+        
+        if ~strcmpi(SNR_adj_file, 'none')
+            SNR_Adjustment = FindSNR_Adjustment(C_Adjust, InFile);
+            if ~isempty(SNR_Adjustment)
+                SNR_dB = nominal_SNR_dB + SNR_Adjustment;
+                %                fprintf('%g\n', SNR_dB);
+            else
+                SNR_dB = nominal_SNR_dB;
+                fprintf('WARNING! - SNR Adjustment. File name not found in list.\n');
+            end
+        end
+        
+        % combine the signal and masker
+        [y,Fs,~,sigAlone,noiseAlone,OutLevelChange] = add_noise(StimulusFile, NoiseFile, MaskerWavStart, SNR_dB, 0, ...
+            'noise', InRMS, OutRMS, warning_noise_duration, NoiseRiseFall);
+        
+        % if required, apply crude spatialization (based on overall ITD or by simply inverting the polarity)
+        if strcmp(itd_invert,'ITD') && ~ITD_us==0 % if ITD is to be applied (i.e. is not zero)
+            if strcmp(lateralize,'signal')
+                % create lagging and leading signal
+                sig_lead = [sigAlone; zeros(round(((ITD_us*Fs)/10^6)),1)];
+                sig_lag = [zeros(round(((ITD_us*Fs)/10^6)),1); sigAlone]; % NB: ITD is in microseconds
+                % equate length of noiseAlone with that of signal by adding zeros at the end
+                nz_front = [noiseAlone; zeros(round(((ITD_us*Fs)/10^6)),1)];
+                % combine signal and noise
+                lead = sig_lead + nz_front;
+                lag = sig_lag + nz_front;
+                % combine left and right channels
+                y = [lag,lead]; % position of the signal is on the right
+            elseif strcmp(lateralize,'noise')
+                % create lagging and leading noise
+                noise_lead = [noiseAlone; zeros(round(((ITD_us*Fs)/10^6)),1)];
+                noise_lag = [zeros(round(((ITD_us*Fs)/10^6)),1); noiseAlone]; % NB: ITD is in microseconds
+                % equate length of sigAlone with that of noise by adding zeros at the end
+                sig_front = [sigAlone; zeros(round(((ITD_us*Fs)/10^6)),1)];
+                % combine signal and noise
+                lead = sig_front + noise_lead;
+                lag = sig_front + noise_lag;
+                % combine left and right channels
+                y = [lag,lead]; % position of the noise is on the right
+            elseif strcmp(lateralize,'signz')
+                % create lagging and leading signal
+                noise_lead = [noiseAlone; zeros(round(((ITD_us*Fs)/10^6)),1)];
+                noise_lag = [zeros(round(((ITDus*Fs)/10^6)),1); noiseAlone]; % NB: ITD is in microseconds
+                % create lagging and leading noise
+                noise_lead = [noiseAlone; zeros(round(((ITD_us*Fs)/10^6)),1)];
+                noise_lag = [zeros(round(((ITD_us*Fs)/10^6)),1); noiseAlone]; % NB: ITD is in microseconds
+                % combine signal and noise (one leads, other lags)
+                lead = sig_lead + noise_lag;
+                lag = sig_lag + noise_lead;
+                % combine left and right channels
+                y = [lag,lead]; % position of the signal is on the right
+            else
+                error('If ITD_invert is set to ITD, lateralize should be either signal, noise, or signz (i.e. both)')
+            end
+        elseif strcmp(itd_invert,'ITD') && ITD_us==0
+            error('If laterlize is set to ITD, then an ITD >0 should be specified')
+        elseif strcmp(itd_invert,'inverted')
+            if strcmp(lateralize,'signal')
+                % invert signal polarity
+                sig_inv = -1*sigAlone;
+                % combine signal and noise
+                sig_nz_inv = sig_inv + noiseAlone;
+                sig_nz = sigAlone + noiseAlone;
+                % combine left and right channels
+                y = [sig_nz_inv, sig_nz]; % left channel is always inverted
+            elseif strcmp(lateralize,'noise')
+                % invert noise polarity
+                nz_inv = -1*noiseAlone;
+                % combine signal and noise
+                sig_nz_inv = nz_inv + sigAlone;
+                sig_nz = sigAlone + noiseAlone;
+                % combine left and right channels
+                y = [sig_nz_inv, sig_nz]; % left channel is always inverted
+            elseif strcmp(lateralize,'signz')
+                % invert signal and noise polarities
+                sig_inv = -1*sigAlone;
+                nz_inv = -1*noiseAlone;
+                % combine signal and noise, where one is inverted and the
+                % other isn't
+                nz_sig_inv = sig_inv + noiseAlone; % inverted signal + non-inverted noise
+                sig_nz_inv = nz_inv + sigAlone; % non-inverted signal + inverted noise
+                y = [sig_nz_inv, nz_sig_inv]; % left: inverted noise, right: inverted signal
+            else
+                error('If ITD_invert is set to inverted, lateralize should be either signal, noise, or signz (i.e. both)')
+            end
+        end
+        
+        if PermuteMaskerWave % keep track of masker sections used
+            if nWavSection==nSections
+                nWavSection = 0;
+                [nSections, wavSections] = GenerateWavSections(NoiseFile, MaxDurTargetSamples);
+            end
+        end
+    end
+    
+    % make a silent contralateral noise for monaural presentations
+    if ~strcmp(itd_invert,'ITD') && ~strcmp(itd_invert,'inverted') % if no ITD or inverting polarity is applied
+        ContraNoise = zeros(size(y));
+        % determine the ear(s) to play out the stimuli
+        switch upper(ear)
             case 'L', y = [y ContraNoise];
             case 'R', y = [ContraNoise y];
-            case 'B', y = [y y];        
+            case 'B', y = [y y];
             otherwise error('variable ear must be one of L, R or B')
-       end
-   end
-   
-   %% collect response
-   response = VCVresponses(y,Fs);
-   correct = strcmpi(response,consonant);
-
-   %% record response
-   TmpTimeOfResponse = fix(clock);
-   TimeOfResponse=sprintf('%02d:%02d:%02d',...
-          TmpTimeOfResponse(4),TmpTimeOfResponse(5),TmpTimeOfResponse(6));
-   % test for quitting
-   if strcmp(response,'quit') 
-      break
-   end
-          
-   fout = fopen(OutFile, 'at');
-   % print out relevant information
-% fprintf(fout, 'listener,date,sTime,trial,targets,SNR,adj_SNR,OutLevelChange,masker,wave,V,C,response,correct,rTime,rev');
-   fprintf(fout, '\n%s,%s,%s,%d,%d,%s,%+5.1f,%+5.1f,%+5.1f,%s,%s,%s,%s,%s,%d,%s', ...
-       ListenerName,StartDate,StartTimeString,tracking,trial,TargetDirectory,nominal_SNR_dB,SNR_dB,...
-       OutLevelChange,NoiseFileName,InFile,InFile(1),consonant,response,correct,TimeOfResponse);
-   
-   %% feedback here if training
-   if strcmpi(Train, 'train');
-       VCVFeedback(correct, InFile, consonant, response, y, Fs, OutRMS);
-   end
-
-   %%  adaptive down procedure
-   if ~strcmpi(TestType,'fixed')
-       %% mark the direction and adjust correct_count
-       if correct
-           correct_count = correct_count + 1;
-           
-           if correct_count == criterion
-               current_change = -1;
-               next_nominal_SNR = nominal_SNR_dB +  change*current_change;
-               correct_count = 0;
-           else
-               next_nominal_SNR = nominal_SNR_dB;
-           end
-       else
-           current_change = 1;
-           correct_count = 0;
-           next_nominal_SNR = nominal_SNR_dB +  change*current_change;
-       end
-       
-       % are we at a turnaround? If so, do a few things
-       if (previous_change ~= current_change)
-           % reduce step proportion if not minimum */
-           if ((change-0.001) > MIN_change_dB) % allow for rounding error
-               change = change-inc;
-           else % final turnarounds, so start keeping a tally
-               num_turns = num_turns + 1;
-               reversals(num_turns) = nominal_SNR_dB;
-               fprintf(fout,',*');
-           end
-           % reset change indicator and count of correct responses
-           previous_change = current_change;
-           criterion = final_criterion;
-       end
-       
-       fclose(fout);
-       
-       % record all levels visted over final reversals
-       if num_turns
-           levels_count = levels_count + 1;
-           levels_visited(levels_count) = nominal_SNR_dB;
-       end
-       
-       %% set level for next trial
-       nominal_SNR_dB = next_nominal_SNR;
-       
-       % ensure that the current level is within the possible range and keep track of hitting the endpoints
-       if nominal_SNR_dB>MAX_SNR_dB
-           nominal_SNR_dB = MAX_SNR_dB;
-           limit = limit+1;
-       end
-   else
-       totalCorrect = totalCorrect + correct;
-   end
+        end
+    end
+    
+    %% collect response
+    response = VCVresponses(y,Fs);
+    correct = strcmpi(response,consonant);
+    
+    %% record response
+    TmpTimeOfResponse = fix(clock);
+    TimeOfResponse=sprintf('%02d:%02d:%02d',...
+        TmpTimeOfResponse(4),TmpTimeOfResponse(5),TmpTimeOfResponse(6));
+    % test for quitting
+    if strcmp(response,'quit')
+        break
+    end
+    
+    fout = fopen(OutFile, 'at');
+    % print out relevant information
+    % fprintf(fout, 'listener,date,sTime,trial,targets,SNR,adj_SNR,OutLevelChange,masker,wave,V,C,response,correct,rTime,rev');
+    fprintf(fout, '\n%s,%s,%s,%d,%d,%s,%+5.1f,%+5.1f,%+5.1f,%s,%s,%+5.1f,%s,%s,%s,%s,%s,%d,%s', ...
+        ListenerName,StartDate,StartTimeString,tracking,trial,TargetDirectory,nominal_SNR_dB,SNR_dB,...
+        OutLevelChange,itd_invert,lateralize,ITD_us,NoiseFileName,InFile,InFile(1),consonant,response,correct,TimeOfResponse);
+    
+    %% feedback here if training
+    if strcmpi(Train, 'train');
+        VCVFeedback(correct, InFile, consonant, response, y, Fs, OutRMS);
+    end
+    
+    %%  adaptive down procedure
+    if ~strcmpi(TestType,'fixed')
+        %% mark the direction and adjust correct_count
+        if correct
+            correct_count = correct_count + 1;
+            
+            if correct_count == criterion
+                current_change = -1;
+                next_nominal_SNR = nominal_SNR_dB +  change*current_change;
+                correct_count = 0;
+            else
+                next_nominal_SNR = nominal_SNR_dB;
+            end
+        else
+            current_change = 1;
+            correct_count = 0;
+            next_nominal_SNR = nominal_SNR_dB +  change*current_change;
+        end
+        
+        % are we at a turnaround? If so, do a few things
+        if (previous_change ~= current_change)
+            % reduce step proportion if not minimum */
+            if ((change-0.001) > MIN_change_dB) % allow for rounding error
+                change = change-inc;
+            else % final turnarounds, so start keeping a tally
+                num_turns = num_turns + 1;
+                reversals(num_turns) = nominal_SNR_dB;
+                fprintf(fout,',*');
+            end
+            % reset change indicator and count of correct responses
+            previous_change = current_change;
+            criterion = final_criterion;
+        end
+        
+        fclose(fout);
+        
+        % record all levels visted over final reversals
+        if num_turns
+            levels_count = levels_count + 1;
+            levels_visited(levels_count) = nominal_SNR_dB;
+        end
+        
+        %% set level for next trial
+        nominal_SNR_dB = next_nominal_SNR;
+        
+        % ensure that the current level is within the possible range and keep track of hitting the endpoints
+        if nominal_SNR_dB>MAX_SNR_dB
+            nominal_SNR_dB = MAX_SNR_dB;
+            limit = limit+1;
+        end
+    else
+        totalCorrect = totalCorrect + correct;
+    end
 end  % end of a single trial */
 
 levels_visited = levels_visited(1:levels_count);
@@ -364,13 +422,13 @@ EndTimeString=sprintf('%02d:%02d:%02d',EndTime(4),EndTime(5),EndTime(6));
 
 %% output summary statistics
 fout = fopen(SummaryOutFile, 'at');
-fprintf(fout, 'listener,date,sTime,endTime,TestType,tracking,SentType,stimuli,noise,version');
+fprintf(fout, 'listener,date,sTime,endTime,TestType,tracking,SentType,stimuli,noise,manipulation,lateralied,ITD,version');
 % adaptive procedures
 if ~strcmp(TestType,'fixed')
     fprintf(fout, ',finish,uRevs,sdRevs,nRevs,nTrials,uLevs,sdLevs');
-    fprintf(fout, '\n%s,%s,%s,%s,%s,%d,%s,%s,%s,%s', ...
+    fprintf(fout, '\n%s,%s,%s,%s,%s,%d,%s,%s,%s,%s,%s,%+5.1f.%s', ...
         ListenerName,StartDate,StartTimeString,EndTimeString,...
-        TestType,tracking,TargetType,TargetDirectory,NoiseFileName,VERSION);
+        TestType,tracking,TargetType,TargetDirectory,NoiseFileName,itd_invert,lateralize,ITD_us,VERSION);
     
     % print out summary statistics -- how did we get here?
     if (limit>=3) % bumped up against the limits
@@ -404,9 +462,9 @@ if ~strcmp(TestType,'fixed')
     fprintf(fout, ',%d,%d,%5.2f,%5.2f', num_turns, trial, mean_levs, sd_levs);
 else % fixed test
     fprintf(fout, ',SNR,nCorrect,nKW,pCorrect');
-    fprintf(fout, '\n%s,%s,%s,%s,%s,%s,%s,%s,%s', ...
+    fprintf(fout, '\n%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%+5.1f,%s', ...
         ListenerName,StartDate,StartTimeString,EndTimeString,...
-        TestType,TargetType,TargetDirectory,NoiseFileName,VERSION);
+        TestType,TargetType,TargetDirectory,NoiseFileName,itd_invert,lateralize,ITD_us,VERSION);
     
     fprintf(fout, ',%g,%d,%d,%f', nominal_SNR_dB,totalCorrect, trial, totalCorrect/trial);
 end
@@ -419,13 +477,13 @@ fclose('all');
 % a training run
 
 if ~strcmpi(ListenerName(1),'p')  && ~strcmpi(Train, 'train')
-
+    
     fsum = fopen(csv_summary, 'at');
     if strcmpi(TestType, 'Fixed')
         fprintf(fsum, '%s,%s,%s,%s,%s,%s,%g,%d,%d,%4.3f\n', ...
-            StartDate,StartTimeString,ListenerName,Session,TargetDirectory,NoiseFileName,nominal_SNR_dB,totalCorrect,trial,totalCorrect/trial); 
+            StartDate,StartTimeString,ListenerName,Session,TargetDirectory,NoiseFileName,nominal_SNR_dB,totalCorrect,trial,totalCorrect/trial);
     else
-        fprintf(fsum, '%s,%s,%s,%d,%s,%s,%s,%5.1f,%5.1f\n', ... 
+        fprintf(fsum, '%s,%s,%s,%d,%s,%s,%s,%5.1f,%5.1f\n', ...
             StartDate,StartTimeString,ListenerName,tracking,Session,TargetDirectory,NoiseFileName,mean_revs,sd_revs);
     end
     fclose(fsum);
@@ -433,4 +491,4 @@ end
 
 set(0,'ShowHiddenHandles','on');
 delete(findobj('Type','figure'));
-   
+

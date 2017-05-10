@@ -3,3 +3,4 @@ Date,Time,Listener,Session,Targets,Masker,SNR,N_correct,Total_KW,p_corr
 21-Feb-2017,10:57:43,99,0,VCVa,None,999,8,10,0.800
 28-Mar-2017,19:28:00,e,0,VCV_KM&TG,SpNz44100,-5,6,11,0.545
 28-Mar-2017,19:29:14,e,0,VCV_KM&TG,SpNz44100,-5,11,21,0.524
+10-May-2017,15:45:58,SR,0,VCV_KM&TG,SpNz44100,10,2,3,0.667

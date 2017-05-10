@@ -32,7 +32,7 @@ function varargout = VCVTestSpecs(varargin)
 
 % Edit the above text to modify the response to help VCVTestSpecs
 
-% Last Modified by GUIDE v2.5 08-May-2017 16:14:24
+% Last Modified by GUIDE v2.5 10-May-2017 15:13:11
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -124,14 +124,24 @@ if length(varargin{1})>1
             handles.Train = char(varargin{1}(index+1));
         elseif strcmpi('SNR_adj_file', varargin{1}(index))
             handles.SNR_adj_file = char(varargin{1}(index+1));
-        elseif strcmpi('ITD', varargin{1}(index))
+        elseif strcmpi('ITD_us', varargin{1}(index))
             set(handles.itd_us,'String',num2str(cell2mat(varargin{1}(index+1))));
-        elseif strcmpi('side', (varargin{1}(index)))
-            if strcmpi(char(upper(varargin{1}(index+1))),'left')
-                set(handles.noiseLeft, 'Value', 1)
-            elseif strcmpi(char(upper(varargin{1}(index+1))),'right')
-                set(handles.noiseRight, 'Value', 1)                      
+        elseif strcmpi('itd_invert', (varargin{1}(index)))
+            if strcmpi(char(upper(varargin{1}(index+1))),'ITD')
+                set(handles.ITD, 'Value', 1)
+            elseif strcmpi(char(upper(varargin{1}(index+1))),'inverted')
+                set(handles.inverted, 'Value', 1) 
+            elseif strcmpi(char(upper(varargin{1}(index+1))),'none')
+                set(handles.none, 'Value', 1) 
             end   
+        elseif strcmpi('lateralize', (varargin{1}(index)))
+            if strcmpi(char(upper(varargin{1}(index+1))),'signal')
+                set(handles.signal, 'Value', 1)
+            elseif strcmpi(char(upper(varargin{1}(index+1))),'noise')
+                set(handles.noise, 'Value', 1) 
+            elseif strcmpi(char(upper(varargin{1}(index+1))),'signz')
+                set(handles.signz, 'Value', 1) 
+            end  
         elseif strcmpi('VolumeSettingsFile', varargin{1}(index))
             handles.VolumeSettingsFile = char(varargin{1}(index+1));
         else
@@ -165,14 +175,14 @@ varargout{6} = handles.L;
 varargout{7} = handles.Reps;
 varargout{8} = handles.List;
 varargout{9} = handles.step;
-varargout{10} = handles.Channels;
-varargout{11} = handles.Shift;
-varargout{12} = handles.Session;
-varargout{13} = handles.Train;
-varargout{14} = handles.SNR_adj_file;
-varargout{15} = handles.VolumeSettingsFile;
+varargout{10} = handles.Session;
+varargout{11} = handles.Train;
+varargout{12} = handles.SNR_adj_file;
+varargout{13} = handles.VolumeSettingsFile;
+varargout{14} = handles.itd_invert;
+varargout{15} = handles.lateralize;
 varargout{16} = handles.itd_us;
-varargout{17} = handles.side;
+
 % The figure can be deleted now
 delete(handles.figure1);
 
@@ -321,12 +331,19 @@ elseif get(handles.Right,'Value')
 else
     handles.Ear='Other';
 end
-if get(handles.noiseLeft,'Value')
-    handles.side='left';
-elseif get(handles.noiseRight,'Value')
-    handles.side='right';
-else
-    handles.side='front';
+if get(handles.signal,'Value')
+    handles.lateralize='signal';
+elseif get(handles.noise,'Value')
+    handles.lateralize='noise';
+else get(handles.signz,'Value')
+    handles.lateralize='signz';
+end
+if get(handles.ITD,'Value')
+    handles.itd_invert='ITD';
+elseif get(handles.inverted,'Value')
+    handles.itd_invert='inverted';
+elseif get(handles.none,'Value')
+    handles.itd_invert='none';
 end
 
 handles.O = get(handles.OrderFile,'String');
@@ -337,8 +354,6 @@ handles.Reps = str2num(get(handles.Repetitions,'String'));
 handles.itd_us = str2num(get(handles.itd_us,'String'));
 handles.List = get(handles.ListName,'String');
 handles.step = str2num(get(handles.FinalStepSize,'String'));
-handles.Channels = str2num(get(handles.Channels_edit, 'String'));
-handles.Shift = str2num(get(handles.Shift_edit, 'String'));
 
 guidata(hObject, handles); % Save the updated structure
 uiresume(handles.figure1);
