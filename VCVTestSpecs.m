@@ -32,7 +32,7 @@ function varargout = VCVTestSpecs(varargin)
 
 % Edit the above text to modify the response to help VCVTestSpecs
 
-% Last Modified by GUIDE v2.5 10-May-2017 15:13:11
+% Last Modified by GUIDE v2.5 30-May-2017 14:44:03
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -89,6 +89,10 @@ if length(varargin{1})>1
             set(handles.MaskerFile,'String',['Maskers\' char(varargin{1}(index+1))]);
         elseif strcmpi('SentenceDirectory', varargin{1}(index))
             set(handles.OrderFile,'String',char(varargin{1}(index+1)));
+        elseif strcmpi('SNR_adj_file', varargin{1}(index))
+            set(handles.adjFile,'String',char(varargin{1}(index+1)));
+        elseif strcmpi('VolumeSettingsFile', varargin{1}(index))
+            set(handles.VolSetFile,'String',char(varargin{1}(index+1)));
         elseif strcmpi('ListName', varargin{1}(index))
             set(handles.ListName,'String',num2str(cell2mat(varargin{1}(index+1)))); 
         elseif strcmpi('Listener', varargin{1}(index))
@@ -354,6 +358,8 @@ handles.Reps = str2num(get(handles.Repetitions,'String'));
 handles.itd_us = str2num(get(handles.itd_us,'String'));
 handles.List = get(handles.ListName,'String');
 handles.step = str2num(get(handles.FinalStepSize,'String'));
+handles.VolumeSettingsFile = get(handles.VolSetFile,'String');
+handles.SNR_adj_file = get(handles.adjFile,'String');
 
 guidata(hObject, handles); % Save the updated structure
 uiresume(handles.figure1);
@@ -493,6 +499,52 @@ function itd_us_Callback(hObject, eventdata, handles)
 % --- Executes during object creation, after setting all properties.
 function itd_us_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to itd_us (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function adjFile_Callback(hObject, eventdata, handles)
+% hObject    handle to adjFile (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of adjFile as text
+%        str2double(get(hObject,'String')) returns contents of adjFile as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function adjFile_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to adjFile (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function VolSetFile_Callback(hObject, eventdata, handles)
+% hObject    handle to VolSetFile (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of VolSetFile as text
+%        str2double(get(hObject,'String')) returns contents of VolSetFile as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function VolSetFile_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to VolSetFile (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 

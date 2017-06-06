@@ -204,7 +204,7 @@ while (num_turns<FINAL_TURNS  && limit<=MaxBumps && trial<n_trials)
     
     if strcmpi(NoiseFileName, 'none')
         
-        [y, Fs] = audioread(StimulusFile);
+        [y, Fs] = audioread([StimulusFile '.wav']);
         OutLevelChange = 0;
         % check if stereo -- if so, take only one channel
         if size(y,2)>1
