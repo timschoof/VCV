@@ -32,7 +32,7 @@ function varargout = VCVTestSpecs(varargin)
 
 % Edit the above text to modify the response to help VCVTestSpecs
 
-% Last Modified by GUIDE v2.5 30-May-2017 14:44:03
+% Last Modified by GUIDE v2.5 08-Jun-2017 10:35:30
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -111,11 +111,11 @@ if length(varargin{1})>1
             end         
         elseif strcmpi('TestType', varargin{1}(index))
             if strcmpi('adaptiveUp', char(varargin{1}(index+1)))
-                set(handles.AdaptiveUp,'Value',1);
+                set(handles.adaptiveUp,'Value',1);
             elseif strcmpi('adaptiveDown', char(varargin{1}(index+1)))
-                set(handles.AdaptiveDown,'Value',1);
+                set(handles.adaptiveDown,'Value',1);
             else
-                set(handles.Fixed,'Value',1)
+                set(handles.fixed,'Value',1)
             end                 
         elseif strcmpi('FinalStep', varargin{1}(index))
             set(handles.FinalStepSize,'String',num2str(cell2mat(varargin{1}(index+1))));  
@@ -319,9 +319,9 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-if get(handles.AdaptiveUp,'Value')
+if get(handles.adaptiveUp,'Value')
     handles.AorF='adaptiveUp';
-elseif get(handles.AdaptiveDown,'Value')
+elseif get(handles.adaptiveDown,'Value')
     handles.AorF='adaptiveDown'; 
 else
     handles.AorF='fixed';

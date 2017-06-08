@@ -40,8 +40,20 @@ if strcmp(TestType,'fixed')
     %     FINAL_TURNS = MaxTrials;
     MAX_SNR_dB = 99;
     csv_summary = 'VCV_summary_fixed.csv';
+    if ~exist(fullfile(csv_summary))
+        summary_csv_File = fullfile(csv_summary);
+        fout = fopen(summary_csv_File, 'at');
+            fprintf(fout, 'Date,Time,Listener,Session,Targets,Masker,SNR,N_correct,Total_KW,p_corr');
+        fclose(fout);
+    end
 else
     csv_summary = 'VCV_summary_adapt.csv';
+    if ~exist(csv_summary)
+        summary_csv_File = fullfile(csv_summary);
+        fout = fopen(summary_csv_File, 'at');
+            fprintf(fout, 'Date,Time,Listener,Session,Sentences,Masker,SRT,Std_Dev');
+        fclose(fout);
+    end
 end
 
 if strcmpi(NoiseFile, 'none') || strcmpi(NoiseFile, 'Maskers\None')

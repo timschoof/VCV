@@ -1,4 +1,0 @@
-listener,date,sTime,tracking,trial,targets,SNR,adj_SNR,OutLevelChange,manipulation,lateralized,ITD,masker,wave,V,C,response,correct,rTime,rev
-L99xx,30-May-2017,14:53:32,50,1,VCV_KM&TG,-10.0,-11.9, +0.0,none,signal, +0.0,SpNz44100,UF_U04_TG,U,F,M,0,14:53:36
-L99xx,30-May-2017,14:53:32,50,2,VCV_KM&TG, +0.0, -5.5, +0.0,none,signal, +0.0,SpNz44100,AK_A03_TG,A,K,P,0,14:53:40
-L99xx,30-May-2017,14:53:32,50,3,VCV_KM&TG,+10.0,+14.1, +0.0,none,signal, +0.0,SpNz44100,IN_I02_TG,I,N,N,1,14:53:42
