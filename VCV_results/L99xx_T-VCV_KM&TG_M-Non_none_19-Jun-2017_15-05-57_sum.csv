@@ -1,2 +1,0 @@
-listener,date,sTime,endTime,TestType,tracking,SentType,stimuli,noise,manipulation,lateralied,ITD,version,SNR,nCorrect,nKW,pCorrect
-L99xx,19-Jun-2017,15:05:57,15:06:09,fixed,VCV,VCV_KM&TG,None,none,signal, +0.0,HHL,999,0,1,0.000000
