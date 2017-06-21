@@ -21,8 +21,11 @@ if nargin == 0 || isnumeric(varargin{1}) % LAUNCH GUI
     %		varargout{1} = fig;
     %	end
     pause(0.3);
-    aud_obj = audioplayer(varargin{1},varargin{2});
-    playblocking(aud_obj);
+%     aud_obj = audioplayer(varargin{1},varargin{2});
+%     playblocking(aud_obj);
+    audio=varargin{1};
+    
+    playrec('play', audio, [1,2])
     
     % Wait for callbacks to run and window to be dismissed:
     uiwait(fig);

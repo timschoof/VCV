@@ -1,0 +1,4 @@
+listener,date,sTime,tracking,trial,targets,SNR,adj_SNR,OutLevelChange,manipulation,lateralized,ITD,masker,wave,V,C,response,correct,rTime,rev
+L99xx,21-Jun-2017,11:01:43,50,1,VCV_KM&TG,+999.0,+999.0, +0.0,none,signal, +0.0,None,AG_A03_TG,A,G,M,0,11:02:00
+L99xx,21-Jun-2017,11:01:43,50,2,VCV_KM&TG,+999.0,+999.0, +0.0,none,signal, +0.0,None,IK_I01_TG,I,K,W,0,11:02:26
+L99xx,21-Jun-2017,11:01:43,50,3,VCV_KM&TG,+999.0,+999.0, +0.0,none,signal, +0.0,None,IZ_I02_TG,I,Z,W,0,11:02:42

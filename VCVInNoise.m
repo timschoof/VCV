@@ -26,6 +26,11 @@ mInputArgs = varargin;
 rng('shuffle');
 warning('off', 'MATLAB:fileparts:VersionToBeRemoved')
 
+%% Get audio device ID based on the USB name of the device. 
+%dev = playrec('getDevices');
+playDeviceInd = 16; % RME FireFace channels 3+4 
+recDeviceInd = 1;
+
 %% get essential information for running a test
 % [TestType, ear, TargetDirectory, NoiseFile, SNR_dB, OutFile, Reps, MIN_change_dB,...
 %     ~, ~, Session, Train, SNR_adj_file,VolumeSettingsFile] = VCVTestSpecs(mInputArgs);
@@ -79,7 +84,7 @@ if ~strcmpi(SNR_adj_file, 'none')  % Read in list of SNR adjustments for specifi
 end
 
 %% Settings for level
-[SoundMasterLevel, SoundWaveLevel, InRMS, OutRMS] = SetLevels(VolumeSettingsFile,0); % 0 here means not babyface
+[SoundMasterLevel,SoundWaveLevel,InRMS, OutRMS] = SetLevels(VolumeSettingsFile,0); % 0 here means not babyface
 
 Info.SoundMasterLevel = SoundMasterLevel;
 Info.SoundWaveLevel = SoundWaveLevel;
@@ -345,6 +350,13 @@ while (num_turns<FINAL_TURNS  && limit<=MaxBumps && trial<n_trials)
             otherwise error('variable ear must be one of L, R or B')
         end
     end
+    
+    % intialize playrec
+    if playrec('isInitialised')
+        fprintf('Resetting playrec as previously initialised\n');
+        playrec('reset');
+    end
+    playrec('init', Fs, playDeviceInd, recDeviceInd);
     
     %% collect response
     response = VCVresponses(y,Fs);

@@ -2,7 +2,7 @@ function varargout = VCVTestSpecs(varargin)
 %
 %   output variables:  ** needs updating **
 %   1: test type:   'fixed' 'adaptiveup' 'adaptivedown'
-%   2: Ear(s) to test:  'Both' 'L' 'R'
+%   2: Ear(s) to test:  'B' 'L' 'R'
 %   3: Target directory: e.g., 'IEEE'
 %   4: Masker: e.g., 'SpchNz.wav'
 %   5: SNR in dB: e.g., -4,
@@ -20,7 +20,7 @@ function varargout = VCVTestSpecs(varargin)
 %      function named CALLBACK in VCVTESTSPECS.M with the given input arguments.
 %
 %      VCVTESTSPECS('Property','Value',...) creates a new VCVTESTSPECS or raises the
-%      existing singleton*.  Starting from the left, property value pairs are
+%      existing singleton*.  Starting from the l, property value pairs are
 %      applied to the GUI before TestSpecs_OpeningFunction gets called.  An
 %      unrecognized property name or invalid value makes property application
 %      stop.  All inputs are passed to VCVTestSpecs_OpeningFcn via varargin.
@@ -32,7 +32,7 @@ function varargout = VCVTestSpecs(varargin)
 
 % Edit the above text to modify the response to help VCVTestSpecs
 
-% Last Modified by GUIDE v2.5 08-Jun-2017 10:35:30
+% Last Modified by GUIDE v2.5 21-Jun-2017 15:34:13
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -103,11 +103,11 @@ if length(varargin{1})>1
             set(handles.Channels_edit,'String',char(varargin{1}(index+1)));
         elseif strcmpi('ear', (varargin{1}(index)))
             if strcmpi(char(upper(varargin{1}(index+1))),'B')
-                set(handles.Both, 'Value', 1)
+                set(handles.B, 'Value', 1)
             elseif strcmpi(char(upper(varargin{1}(index+1))),'L')
-                set(handles.Left, 'Value', 1)    
+                set(handles.L, 'Value', 1)    
             elseif strcmpi(char(upper(varargin{1}(index+1))),'R')
-                set(handles.Right, 'Value', 1)                         
+                set(handles.R, 'Value', 1)                         
             end         
         elseif strcmpi('TestType', varargin{1}(index))
             if strcmpi('adaptiveUp', char(varargin{1}(index+1)))
@@ -326,11 +326,11 @@ elseif get(handles.adaptiveDown,'Value')
 else
     handles.AorF='fixed';
 end
-if get(handles.Both,'Value')
+if get(handles.B,'Value')
     handles.Ear='B';
-elseif get(handles.Left,'Value')
+elseif get(handles.L,'Value')
     handles.Ear='L';
-elseif get(handles.Right,'Value')
+elseif get(handles.R,'Value')
     handles.Ear='R';
 else
     handles.Ear='Other';
