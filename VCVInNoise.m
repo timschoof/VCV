@@ -84,12 +84,12 @@ if ~strcmpi(SNR_adj_file, 'none')  % Read in list of SNR adjustments for specifi
 end
 
 %% Settings for level
-[SoundMasterLevel,SoundWaveLevel,InRMS, OutRMS] = SetLevels(VolumeSettingsFile,0); % 0 here means not babyface
+[InRMS, OutRMS] = SetLevels(VolumeSettingsFile); % 0 here means not babyface
 
-Info.SoundMasterLevel = SoundMasterLevel;
-Info.SoundWaveLevel = SoundWaveLevel;
-Info.InRMS = InRMS;
-Info.OutRMS = OutRMS;
+% Info.SoundMasterLevel = SoundMasterLevel;
+% Info.SoundWaveLevel = SoundWaveLevel;
+% Info.InRMS = InRMS;
+% Info.OutRMS = OutRMS;
 
 %% create output files
 status = mkdir(OutputDir);
@@ -285,8 +285,8 @@ while (num_turns<FINAL_TURNS  && limit<=MaxBumps && trial<n_trials)
                 y = [lag,lead]; % position of the noise is on the right
             elseif strcmp(lateralize,'signz')
                 % create lagging and leading signal
-                noise_lead = [noiseAlone; zeros(round(((ITD_us*Fs)/10^6)),1)];
-                noise_lag = [zeros(round(((ITDus*Fs)/10^6)),1); noiseAlone]; % NB: ITD is in microseconds
+                sig_lead = [sigAlone; zeros(round(((ITD_us*Fs)/10^6)),1)];
+                sig_lag = [zeros(round(((ITD_us*Fs)/10^6)),1); sigAlone]; % NB: ITD is in microseconds
                 % create lagging and leading noise
                 noise_lead = [noiseAlone; zeros(round(((ITD_us*Fs)/10^6)),1)];
                 noise_lag = [zeros(round(((ITD_us*Fs)/10^6)),1); noiseAlone]; % NB: ITD is in microseconds
@@ -350,6 +350,8 @@ while (num_turns<FINAL_TURNS  && limit<=MaxBumps && trial<n_trials)
             otherwise error('variable ear must be one of L, R or B')
         end
     end
+    
+%     y = [y;y;y;y;y;y;y;y;y;y;y;y;y;y;y;y;y;y]; % for calibration
     
     % intialize playrec
     if playrec('isInitialised')
@@ -459,7 +461,7 @@ if ~strcmp(TestType,'fixed')
         fprintf(fout,',BUMPED');
     elseif strcmp(response,'quit')  % test for quitting
         fprintf(fout, ',QUIT');
-    elseif (num_turns<FINAL_TURNS)
+    elseif (num_turns>=FINAL_TURNS)
         fprintf(fout, ',RanOut');
     else
         fprintf(fout, ',OK');

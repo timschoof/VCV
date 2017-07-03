@@ -1,6 +1,6 @@
-0.99 0.0625 0 0.5
+W7 0.99 0.0104 0.0 0.09
 
-
+type = 'baby' or 'W7' or 'XP'
 SoundMasterLevel
 SoundWaveLevel
 InRMS

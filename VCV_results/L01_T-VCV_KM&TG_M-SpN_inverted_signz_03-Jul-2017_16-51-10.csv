@@ -1,0 +1,21 @@
+listener,date,sTime,tracking,trial,targets,SNR,adj_SNR,OutLevelChange,manipulation,lateralized,ITD,masker,wave,V,C,response,correct,rTime,rev
+L01,03-Jul-2017,16:51:10,50,1,VCV_KM&TG,-10.0,-10.3, +0.0,inverted,signz, +0.0,SpNz44100,IP_I02_KM,I,P,V,0,16:51:16
+L01,03-Jul-2017,16:51:10,50,2,VCV_KM&TG, +0.0, +3.6, +0.0,inverted,signz, +0.0,SpNz44100,AV_A02_TG,A,V,V,1,16:51:20
+L01,03-Jul-2017,16:51:10,50,3,VCV_KM&TG,-10.0,-13.5, +0.0,inverted,signz, +0.0,SpNz44100,UD_U04_KM,U,D,D,1,16:51:23
+L01,03-Jul-2017,16:51:10,50,4,VCV_KM&TG,-16.0,-14.1, +0.0,inverted,signz, +0.0,SpNz44100,UF_U01_KM,U,F,L,0,16:51:27
+L01,03-Jul-2017,16:51:10,50,5,VCV_KM&TG,-10.0, -6.4, +0.0,inverted,signz, +0.0,SpNz44100,UK_U01_KM,U,K,P,0,16:51:31
+L01,03-Jul-2017,16:51:10,50,6,VCV_KM&TG, -8.0, -1.6, +0.0,inverted,signz, +0.0,SpNz44100,UB_U04_TG,U,B,B,1,16:51:35,*
+L01,03-Jul-2017,16:51:10,50,7,VCV_KM&TG,-10.0,-10.3, +0.0,inverted,signz, +0.0,SpNz44100,UV_U02_KM,U,V,G,0,16:51:42,*
+L01,03-Jul-2017,16:51:10,50,8,VCV_KM&TG, -8.0, -8.6, +0.0,inverted,signz, +0.0,SpNz44100,AP_A04_TG,A,P,L,0,16:51:45
+L01,03-Jul-2017,16:51:10,50,9,VCV_KM&TG, -6.0, -5.7, +0.0,inverted,signz, +0.0,SpNz44100,IM_I04_TG,I,M,L,0,16:51:51
+L01,03-Jul-2017,16:51:10,50,10,VCV_KM&TG, -4.0, -3.2, +0.0,inverted,signz, +0.0,SpNz44100,UV_U01_TG,U,V,D,0,16:51:54
+L01,03-Jul-2017,16:51:10,50,11,VCV_KM&TG, -2.0, +1.0, +0.0,inverted,signz, +0.0,SpNz44100,UZ_U01_TG,U,Z,V,0,16:51:58
+L01,03-Jul-2017,16:51:10,50,12,VCV_KM&TG, +0.0, -5.5, +0.0,inverted,signz, +0.0,SpNz44100,AK_A04_TG,A,K,K,1,16:52:01,*
+L01,03-Jul-2017,16:51:10,50,13,VCV_KM&TG, -2.0, -2.3, +0.0,inverted,signz, +0.0,SpNz44100,ID_I01_TG,I,D,D,1,16:52:04
+L01,03-Jul-2017,16:51:10,50,14,VCV_KM&TG, -4.0, -8.5, +0.0,inverted,signz, +0.0,SpNz44100,IZ_I03_TG,I,Z,D,0,16:52:09,*
+L01,03-Jul-2017,16:51:10,50,15,VCV_KM&TG, -2.0, -6.1, +0.0,inverted,signz, +0.0,SpNz44100,UP_U04_KM,U,P,P,1,16:52:12,*
+L01,03-Jul-2017,16:51:10,50,16,VCV_KM&TG, -4.0, -4.3, +0.0,inverted,signz, +0.0,SpNz44100,IV_I02_TG,I,V,G,0,16:52:16,*
+L01,03-Jul-2017,16:51:10,50,17,VCV_KM&TG, -2.0, -1.7, +0.0,inverted,signz, +0.0,SpNz44100,IW_I02_TG,I,W,B,0,16:52:20
+L01,03-Jul-2017,16:51:10,50,18,VCV_KM&TG, +0.0, +5.8, +0.0,inverted,signz, +0.0,SpNz44100,UL_U03_KM,U,L,L,1,16:52:24,*
+L01,03-Jul-2017,16:51:10,50,19,VCV_KM&TG, -2.0, -2.3, +0.0,inverted,signz, +0.0,SpNz44100,IM_I04_KM,I,M,M,1,16:52:27
+L01,03-Jul-2017,16:51:10,50,20,VCV_KM&TG, -4.0, +0.1, +0.0,inverted,signz, +0.0,SpNz44100,UG_U02_TG,U,G,D,0,16:52:31,*
