@@ -93,8 +93,6 @@ if length(varargin{1})>1
             set(handles.adjFile,'String',char(varargin{1}(index+1)));
         elseif strcmpi('VolumeSettingsFile', varargin{1}(index))
             set(handles.VolSetFile,'String',char(varargin{1}(index+1)));
-        elseif strcmpi('ListName', varargin{1}(index))
-            set(handles.ListName,'String',num2str(cell2mat(varargin{1}(index+1)))); 
         elseif strcmpi('Listener', varargin{1}(index))
             set(handles.ListenerCode,'String',char(varargin{1}(index+1)));
         elseif strcmpi('SNR', varargin{1}(index))
@@ -149,7 +147,7 @@ if length(varargin{1})>1
         elseif strcmpi('VolumeSettingsFile', varargin{1}(index))
             handles.VolumeSettingsFile = char(varargin{1}(index+1));
         else
-            error('Illegal option: %s -- Legal options are:\nTestType\nNoiseFile\nSentenceDirectory\nListName\nListener\nFinalStep\nRepetitions\nSNR\nSession\nTrain\nSNR_adj_file\nVolumeSettingsFile', ...
+            error('Illegal option: %s -- Legal options are:\nTestType\nNoiseFile\nSentenceDirectory\nListener\nFinalStep\nRepetitions\nSNR\nSession\nTrain\nSNR_adj_file\nVolumeSettingsFile', ...
                 char(varargin{1}(index)));
         end
     end
@@ -177,15 +175,14 @@ varargout{4} = handles.M;
 varargout{5} = handles.SNR;
 varargout{6} = handles.L;
 varargout{7} = handles.Reps;
-varargout{8} = handles.List;
-varargout{9} = handles.step;
-varargout{10} = handles.Session;
-varargout{11} = handles.Train;
-varargout{12} = handles.SNR_adj_file;
-varargout{13} = handles.VolumeSettingsFile;
-varargout{14} = handles.itd_invert;
-varargout{15} = handles.lateralize;
-varargout{16} = handles.itd_us;
+varargout{8} = handles.step;
+varargout{9} = handles.Session;
+varargout{10} = handles.Train;
+varargout{11} = handles.SNR_adj_file;
+varargout{12} = handles.VolumeSettingsFile;
+varargout{13} = handles.itd_invert;
+varargout{14} = handles.lateralize;
+varargout{15} = handles.itd_us;
 
 % The figure can be deleted now
 delete(handles.figure1);
@@ -356,7 +353,6 @@ handles.SNR = str2num(get(handles.StartLevel,'String'));
 handles.L = get(handles.ListenerCode,'String');
 handles.Reps = str2num(get(handles.Repetitions,'String'));
 handles.itd_us = str2num(get(handles.itd_us,'String'));
-handles.List = get(handles.ListName,'String');
 handles.step = str2num(get(handles.FinalStepSize,'String'));
 handles.VolumeSettingsFile = get(handles.VolSetFile,'String');
 handles.SNR_adj_file = get(handles.adjFile,'String');
@@ -391,31 +387,6 @@ function Repetitions_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
-
-
-function ListName_Callback(hObject, eventdata, handles)
-% hObject    handle to ListName (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of ListName as text
-%        str2double(get(hObject,'String')) returns contents of ListName as a double
-
-
-% --- Executes during object creation, after setting all properties.
-function ListName_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to ListName (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-
-
 
 
 function FinalStepSize_Callback(hObject, eventdata, handles)
