@@ -375,10 +375,10 @@ while (num_turns<FINAL_TURNS  && limit<=MaxBumps && trial<n_trials)
     
     fout = fopen(OutFile, 'at');
     % print out relevant information
-    % fprintf(fout, 'listener,date,sTime,trial,targets,SNR,adj_SNR,OutLevelChange,VolumeSettings,masker,wave,V,C,response,correct,rTime,rev');
-    fprintf(fout, '\n%s,%s,%s,%d,%d,%s,%+5.1f,%+5.1f,%+5.1f,%s,%s,%s,%+5.1f,%s,%s,%s,%s,%s,%d,%s', ...
+    % fprintf(fout, 'listener,date,sTime,trial,targets,SNR,adj_SNR,OutLevelChange,masker,wave,V,C,response,correct,rTime,rev');
+    fprintf(fout, '\n%s,%s,%s,%d,%d,%s,%+5.1f,%+5.1f,%+5.1f,%s,%s,%+5.1f,%s,%s,%s,%s,%s,%d,%s', ...
         ListenerName,StartDate,StartTimeString,tracking,trial,TargetDirectory,nominal_SNR_dB,SNR_dB,...
-        OutLevelChange,VolumeSettingsFile,itd_invert,lateralize,ITD_us,NoiseFileName,InFile,InFile(1),consonant,response,correct,TimeOfResponse);
+        OutLevelChange,VolumeSettingsFile,,itd_invert,lateralize,ITD_us,NoiseFileName,InFile,InFile(1),consonant,response,correct,TimeOfResponse);
     
     %% feedback here if training
     if strcmpi(Train, 'train');
@@ -488,9 +488,9 @@ if ~strcmp(TestType,'fixed')
     fprintf(fout, ',%d,%d,%5.2f,%5.2f', num_turns, trial, mean_levs, sd_levs);
 else % fixed test
     fprintf(fout, ',SNR,nCorrect,nKW,pCorrect');
-    fprintf(fout, '\n%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%+5.1f,%s', ...
+    fprintf(fout, '\n%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%+5.1f,%s', ...
         ListenerName,StartDate,StartTimeString,EndTimeString,...
-        TestType,TargetType,TargetDirectory,NoiseFileName,VolumeSettingsFile,itd_invert,lateralize,ITD_us,VERSION);
+        TestType,TargetType,TargetDirectory,NoiseFileName,itd_invert,lateralize,ITD_us,VERSION);
     
     fprintf(fout, ',%g,%d,%d,%f', nominal_SNR_dB,totalCorrect, trial, totalCorrect/trial);
 end
