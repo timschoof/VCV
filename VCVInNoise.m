@@ -17,7 +17,7 @@ PermuteMaskerWave = 0;      % minimise repeated playing of sections of masker wa
 START_change_dB = 10.0;
 MIN_change_dB = 3.0;
 INITIAL_TURNS = 2;   % need one for the initial sentence up from the bottom if adaptiveUp
-FINAL_TURNS = 8;
+FINAL_TURNS = 15;
 MaxBumps = 3;
 tracking = 50; % tracking 50% or 71% correct
 mInputArgs = varargin;
@@ -35,8 +35,28 @@ recDeviceInd = 1;
 % [TestType, ear, TargetDirectory, NoiseFile, SNR_dB, OutFile, Reps, MIN_change_dB,...
 %     ~, ~, Session, Train, SNR_adj_file,VolumeSettingsFile] = VCVTestSpecs(mInputArgs);
 
-[TestType, ear, TargetDirectory, NoiseFile, SNR_dB, OutFile, Reps, MIN_change_dB,...
+if nargin==0
+    [TestType, ear, TargetDirectory, NoiseFile, SNR_dB, OutFile, Reps, MIN_change_dB,...
     Session, Train, SNR_adj_file,VolumeSettingsFile,itd_invert,lateralize,ITD_us] = VCVTestSpecs(mInputArgs);
+    
+else % pick up defaults and specified values from args
+    if ~rem(nargin,2)
+        error('You should not have an even number of input arguments');
+    end
+    SpecifiedArgs=VCVparseArgs(varargin{1},varargin{2:end});
+    % now set all parameters obtained
+    fVars=fieldnames(SpecifiedArgs);
+    for f=1:length(fVars)
+        if ischar(eval(['SpecifiedArgs.' char(fVars{f})]))
+            eval([char(fVars{f}) '=' '''' eval(['SpecifiedArgs.' char(fVars{f})]) ''';']);
+        else % it's a number
+            eval([char(fVars{f}) '='  num2str(eval(['SpecifiedArgs.' char(fVars{f})])) ';'])
+        end
+    end
+end
+
+
+
 
 TargetType = upper(TargetDirectory([1:3]));
 if strcmp(TestType,'fixed')
@@ -201,6 +221,10 @@ sd_revs = 999;
 pause(1);
 
 nominal_SNR_dB = SNR_dB;
+
+%% wait to start
+Image = imread('flowers.jpg','jpg');
+GoOrMessageButton('String', 'Here we go!', Image)
 
 %% run the test (do adaptive tracking until stop criterion)
 while (num_turns<FINAL_TURNS  && limit<=MaxBumps && trial<n_trials)
@@ -448,7 +472,7 @@ EndTimeString=sprintf('%02d:%02d:%02d',EndTime(4),EndTime(5),EndTime(6));
 
 %% output summary statistics
 fout = fopen(SummaryOutFile, 'at');
-fprintf(fout, 'listener,date,sTime,endTime,TestType,tracking,SentType,stimuli,noise,VolumeSettings,manipulation,lateralied,ITD,version');
+fprintf(fout, 'listener,date,sTime,endTime,TestType,tracking,SentType,stimuli,noise,VolumeSettings,manipulation,lateralised,ITD,version');
 % adaptive procedures
 if ~strcmp(TestType,'fixed')
     fprintf(fout, ',finish,uRevs,sdRevs,nRevs,nTrials,uLevs,sdLevs');

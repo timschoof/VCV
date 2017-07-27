@@ -1,2 +1,0 @@
-listener,date,sTime,endTime,TestType,tracking,SentType,stimuli,noise,manipulation,lateralied,ITD,version,finish,uRevs,sdRevs,nRevs,nTrials,uLevs,sdLevs
-L01,03-Jul-2017,16:40:29,16:42:01,adaptiveUp,50,VCV,VCV_KM&TG,SpNz44100,ITD,signal,+650.0,HHL,RanOut,-8.50, 6.57,8,22,-8.11, 5.35
