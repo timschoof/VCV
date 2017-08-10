@@ -19,6 +19,7 @@ START_change_dB = 10.0;
 MIN_change_dB = 3.0;
 INITIAL_TURNS = 2;   % need one for the initial sentence up from the bottom if adaptiveUp
 FINAL_TURNS = 15;
+n_trials = 35; % max number of trials
 MaxBumps = 3;
 tracking = 50; % tracking 50% or 71% correct
 mInputArgs = varargin;
@@ -166,7 +167,7 @@ for i=1:Reps
 end
 
 % calculate the number of trials to be performed %
-n_trials = size(trial_order,2);
+% n_trials = size(trial_order,2);
 
 % reduce number of trials if practice run
 if strcmpi(ListenerName(1),'p')
