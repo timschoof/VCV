@@ -487,7 +487,7 @@ if ~strcmp(TestType,'fixed')
     fprintf(fout, ',finish,uRevs,sdRevs,nRevs,nTrials,uLevs,sdLevs');
     fprintf(fout, '\n%s,%s,%s,%s,%s,%d,%s,%s,%s,%s,%s,%s,%+5.1f,%s', ...
         ListenerName,StartDate,StartTimeString,EndTimeString,...
-        TestType,tracking,TargetType,TargetDirectory,NoiseFileName,Level,itd_invert,lateralize,ITD_us,VERSION);
+        TestType,tracking,TargetType,TargetDirectory,NoiseFileName,Le,itd_invert,lateralize,ITD_us,VERSION);
     
     % print out summary statistics -- how did we get here?
     if (limit>=3) % bumped up against the limits

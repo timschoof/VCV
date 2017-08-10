@@ -1,0 +1,2 @@
+listener,date,sTime,tracking,trial,targets,talker,SNR,adj_SNR,OutLevelChange,VolumeSettings,manipulation,lateralized,ITD,masker,wave,V,C,response,correct,rTime,rev
+L99xx,10-Aug-2017,16:29:57,50,1,VCV_KM&TG,TG,+999.0,+999.0, +0.0,80,none,signal, +0.0,None,AF_A04_TG,A,F,F,1,16:30:03
