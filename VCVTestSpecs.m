@@ -7,7 +7,7 @@ function varargout = VCVTestSpecs(varargin)
 %   4: Masker: e.g., 'SpchNz.wav'
 %   5: SNR in dB: e.g., -4,
 %   6: Listener code: e.g., LGP01
-%   
+%
 %
 % VCVTESTSPECS M-file for VCVTestSpecs.fig
 %      VCVTESTSPECS, by itself, creates a new VCVTESTSPECS or raises the existing
@@ -37,11 +37,11 @@ function varargout = VCVTestSpecs(varargin)
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
-                   'gui_Singleton',  gui_Singleton, ...
-                   'gui_OpeningFcn', @VCVTestSpecs_OpeningFcn, ...
-                   'gui_OutputFcn',  @VCVTestSpecs_OutputFcn, ...
-                   'gui_LayoutFcn',  [] , ...
-                   'gui_Callback',   []);
+    'gui_Singleton',  gui_Singleton, ...
+    'gui_OpeningFcn', @VCVTestSpecs_OpeningFcn, ...
+    'gui_OutputFcn',  @VCVTestSpecs_OutputFcn, ...
+    'gui_LayoutFcn',  [] , ...
+    'gui_Callback',   []);
 if nargin && ischar(varargin{1})
     gui_State.gui_Callback = str2func(varargin{1});
 end
@@ -74,10 +74,10 @@ handles.Session = '0';
 % set default test mode
 handles.Train = 'test';
 
-% set default for no adjustment to SNRs across individual 
+% set default for no adjustment to SNRs across individual
 handles.SNR_adj_file = 'none';
 
-% set default Volume Settings file 
+% set default Volume Settings file
 handles.VolumeSettingsFile = 'VolumeSettings.txt';
 
 % process any arguments to re-set the VCVTestSpecs GUI
@@ -103,10 +103,10 @@ if length(varargin{1})>1
             if strcmpi(char(upper(varargin{1}(index+1))),'B')
                 set(handles.B, 'Value', 1)
             elseif strcmpi(char(upper(varargin{1}(index+1))),'L')
-                set(handles.L, 'Value', 1)    
+                set(handles.L, 'Value', 1)
             elseif strcmpi(char(upper(varargin{1}(index+1))),'R')
-                set(handles.R, 'Value', 1)                         
-            end         
+                set(handles.R, 'Value', 1)
+            end
         elseif strcmpi('TestType', varargin{1}(index))
             if strcmpi('adaptiveUp', char(varargin{1}(index+1)))
                 set(handles.adaptiveUp,'Value',1);
@@ -114,9 +114,9 @@ if length(varargin{1})>1
                 set(handles.adaptiveDown,'Value',1);
             else
                 set(handles.fixed,'Value',1)
-            end                 
+            end
         elseif strcmpi('FinalStep', varargin{1}(index))
-            set(handles.FinalStepSize,'String',num2str(cell2mat(varargin{1}(index+1))));  
+            set(handles.FinalStepSize,'String',num2str(cell2mat(varargin{1}(index+1))));
         elseif strcmpi('Repetitions', varargin{1}(index))
             set(handles.Repetitions,'String',num2str(cell2mat(varargin{1}(index+1))));
             
@@ -132,18 +132,20 @@ if length(varargin{1})>1
             if strcmpi(char(upper(varargin{1}(index+1))),'ITD')
                 set(handles.ITD, 'Value', 1)
             elseif strcmpi(char(upper(varargin{1}(index+1))),'inverted')
-                set(handles.inverted, 'Value', 1) 
+                set(handles.inverted, 'Value', 1)
             elseif strcmpi(char(upper(varargin{1}(index+1))),'none')
-                set(handles.none, 'Value', 1) 
-            end   
+                set(handles.none, 'Value', 1)
+            end
         elseif strcmpi('lateralize', (varargin{1}(index)))
             if strcmpi(char(upper(varargin{1}(index+1))),'signal')
                 set(handles.signal, 'Value', 1)
             elseif strcmpi(char(upper(varargin{1}(index+1))),'noise')
-                set(handles.noise, 'Value', 1) 
+                set(handles.noise, 'Value', 1)
             elseif strcmpi(char(upper(varargin{1}(index+1))),'signz')
-                set(handles.signz, 'Value', 1) 
-            end  
+                set(handles.signz, 'Value', 1)
+            elseif strcmpi(char(upper(varargin{1}(index+1))),'neither')
+                set(handles.neither, 'Value', 1)
+            end
         elseif strcmpi('VolumeSettingsFile', varargin{1}(index))
             handles.VolumeSettingsFile = char(varargin{1}(index+1));
         else
@@ -161,7 +163,7 @@ uiwait(handles.figure1);
 
 
 % --- Outputs from this function are returned to the command line.
-function varargout = VCVTestSpecs_OutputFcn(hObject, eventdata, handles) 
+function varargout = VCVTestSpecs_OutputFcn(hObject, eventdata, handles)
 % varargout  cell array for returning output args (see VARARGOUT);
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -319,7 +321,7 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 if get(handles.adaptiveUp,'Value')
     handles.AorF='adaptiveUp';
 elseif get(handles.adaptiveDown,'Value')
-    handles.AorF='adaptiveDown'; 
+    handles.AorF='adaptiveDown';
 else
     handles.AorF='fixed';
 end
@@ -336,8 +338,10 @@ if get(handles.signal,'Value')
     handles.lateralize='signal';
 elseif get(handles.noise,'Value')
     handles.lateralize='noise';
-else get(handles.signz,'Value')
+elseif get(handles.signz,'Value')
     handles.lateralize='signz';
+else get(handles.neither,'Value')
+    handles.lateralize='none';
 end
 if get(handles.ITD,'Value')
     handles.itd_invert='ITD';

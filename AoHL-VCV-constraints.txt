@@ -1,0 +1,10 @@
+ItemFile VCVs2Randomise.txt
+OutputFile VCVsRandomised.txt 
+InputDelimiter "," 
+Property C 3
+Property V 2
+Constraint C MinDist 6
+Constraint C MaxDist 19
+Constraint V MaxRep 2
+
+

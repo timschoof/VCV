@@ -59,6 +59,17 @@ else % pick up defaults and specified values from args
     end
 end
 
+% revert back to some default values if necessary
+if ~strcmp(ear,'B') % if signal is to be monaural
+    itd_invert = 'none';
+end
+if ~strcmp(itd_invert,'ITD') % if no ITD is to be applied
+    ITD_us = 0; % set ITD to 0 microseconds if it's not being used anyway - for saving in output file
+end
+if strcmp(itd_invert,'none') % if no ITD or inverted polarity is to be applied
+   lateralize = 'none'; % set lateralize (i.e. whether to apply ITD or inverted polarity to the signal, noise, or signz) to 'none' if no manipulation is applied - for saving in output file 
+end
+
 TargetType = upper(TargetDirectory([1:3]));
 if strcmp(TestType,'fixed')
     START_change_dB = 0;
@@ -158,7 +169,7 @@ end
 
 %% Generate a random order in which to play the stimuli %%
 for i=1:Reps
-    order = VCVorder(TargetDirectory);
+    order = VCVorderWithConstraints(TargetDirectory);
     if i == 1
         trial_order = order;
     else
@@ -364,9 +375,9 @@ while (num_turns<FINAL_TURNS  && limit<=MaxBumps && trial<n_trials)
         end
     end
     
-    % make a silent contralateral noise for monaural presentations
+    
     if ~strcmp(itd_invert,'ITD') && ~strcmp(itd_invert,'inverted') % if no ITD or inverting polarity is applied
-        ContraNoise = zeros(size(y));
+        ContraNoise = zeros(size(y)); % make a silent contralateral noise for monaural presentations
         % determine the ear(s) to play out the stimuli
         switch upper(ear)
             case 'L', y = [y ContraNoise];
