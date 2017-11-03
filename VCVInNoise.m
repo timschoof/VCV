@@ -8,7 +8,7 @@ function VCVInNoise(varargin)
 
 %% initialisations
 VERSION = 'HHL';
-player = 0; % are you using playrec? yes = 1, no = 0
+player = 1; % are you using playrec? yes = 1, no = 0
 
 warning_noise_duration = 500;         Info.warning_noise_duration = warning_noise_duration;
 NoiseRiseFall = 200;                  Info.NoiseRiseFall = NoiseRiseFall;
@@ -24,15 +24,15 @@ MaxBumps = 3;
 tracking = 50; % tracking 50% or 71% correct
 mInputArgs = varargin;
 
-% initialise the random number generator
-rng('shuffle');
-warning('off', 'MATLAB:fileparts:VersionToBeRemoved')
+% % initialise the random number generator
+% rng('shuffle');
+% warning('off', 'MATLAB:fileparts:VersionToBeRemoved')
 
 %% Get audio device ID based on the USB name of the device.
 if player == 1 % if you're using playrec
     %dev = playrec('getDevices');
-    playDeviceInd = 16; % RME FireFace channels 3+4
-    recDeviceInd = 1;
+    playDeviceInd = 50; % RME FireFace channels 3+4
+    recDeviceInd = 50;
 end
 
 %% get essential information for running a test
@@ -387,7 +387,7 @@ while (num_turns<FINAL_TURNS  && limit<=MaxBumps && trial<n_trials)
         end
     end
     
-    %     y = [y;y;y;y;y;y;y;y;y;y;y;y;y;y;y;y;y;y]; % for calibration
+%     y = [y;y;y;y;y;y;y;y;y;y;y;y;y;y;y;y;y;y]; % for calibration
     
     % intialize playrec
     if player == 1 % if you're using playrec
@@ -562,4 +562,9 @@ end
 
 set(0,'ShowHiddenHandles','on');
 delete(findobj('Type','figure'));
+
+% close psych toolbox audio
+PsychPortAudio('DeleteBuffer');
+PsychPortAudio('Close');
+
 

@@ -21,10 +21,10 @@ p.addParamValue('Reps', 1, @isnumeric);
 p.addParamValue('SNR_adj_file', 'VCV_adjust_SNR_KM&TG.csv', @ischar); %
 p.addParamValue('VolumeSettingsFile', 'VolumeSettings-80dBSPL.txt', @ischar);   
 p.addParamValue('itd_invert', 'ITD', @ischar); % options: ITD = interaural time difference, inverted = invert polarity in one ear, none = no manipulation
-p.addParamValue('lateralize', 'noise', @ischar); % apply ITD or inverted polarity manipulation to: signal, noise, or signz (i.e. both) - this defaults to 'none' if no manipulation is applied
+p.addParamValue('lateralize', 'noise', @ischar); % apply ITD or inverted polarity manipulation to: signal, noise, signz (i.e. both), or none - this defaults to 'none' if no manipulation is applied
 p.addParamValue('Train', 'test', @ischar); 
 p.addParamValue('Session', '1', @ischar);
-p.addParamValue('ITD_us', 650, @isnumeric); % ITD in microseconds (if ITD is applied) - this defaults to 0 if ITD is not applied
+p.addParamValue('ITD_us', 0, @isnumeric); % ITD in microseconds (if ITD is applied) - this defaults to 0 if ITD is not applied
 
 p.parse(ListenerName, varargin{:});
 

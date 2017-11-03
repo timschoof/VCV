@@ -24,7 +24,7 @@ if nargin == 0 || isnumeric(varargin{1}) % LAUNCH GUI
 
     audio=varargin{1};
     if varargin{3} == 1 % if you're using playrec
-        playrec('play', audio, [1,2]);
+        playrec('play', audio, [3,4]);
     elseif varargin{3} == 0 % if you're not using playrec
         aud_obj = audioplayer(varargin{1},varargin{2});
         playblocking(aud_obj);
