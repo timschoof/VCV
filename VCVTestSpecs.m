@@ -32,7 +32,7 @@ function varargout = VCVTestSpecs(varargin)
 
 % Edit the above text to modify the response to help VCVTestSpecs
 
-% Last Modified by GUIDE v2.5 21-Jun-2017 15:34:13
+% Last Modified by GUIDE v2.5 05-Mar-2018 18:05:06
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -134,7 +134,7 @@ if length(varargin{1})>1
             elseif strcmpi(char(upper(varargin{1}(index+1))),'inverted')
                 set(handles.inverted, 'Value', 1)
             elseif strcmpi(char(upper(varargin{1}(index+1))),'none')
-                set(handles.none, 'Value', 1)
+                set(handles.neither, 'Value', 1)
             end
         elseif strcmpi('lateralize', (varargin{1}(index)))
             if strcmpi(char(upper(varargin{1}(index+1))),'signal')
@@ -347,7 +347,7 @@ if get(handles.ITD,'Value')
     handles.itd_invert='ITD';
 elseif get(handles.inverted,'Value')
     handles.itd_invert='inverted';
-elseif get(handles.none,'Value')
+elseif get(handles.neither,'Value')
     handles.itd_invert='none';
 end
 

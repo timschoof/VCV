@@ -8,14 +8,14 @@ function VCVInNoise(varargin)
 
 %% initialisations
 VERSION = 'HHL';
-player = 1; % are you using playrec? yes = 1, no = 0
+player = 0; % are you using playrec? yes = 1, no = 0
 
 warning_noise_duration = 500;         Info.warning_noise_duration = warning_noise_duration;
 NoiseRiseFall = 200;                  Info.NoiseRiseFall = NoiseRiseFall;
 OutputDir = 'VCV_results';
 MAX_SNR_dB = 15;
 PermuteMaskerWave = 0;      % minimise repeated playing of sections of masker wav
-START_change_dB = 10.0;
+START_change_dB = 8.0;
 MIN_change_dB = 3.0;
 INITIAL_TURNS = 2;   % need one for the initial sentence up from the bottom if adaptiveUp
 FINAL_TURNS = 15;
@@ -563,8 +563,13 @@ end
 set(0,'ShowHiddenHandles','on');
 delete(findobj('Type','figure'));
 
-% close psych toolbox audio
-PsychPortAudio('DeleteBuffer');
-PsychPortAudio('Close');
+if player == 1
+    % close psych toolbox audio
+    PsychPortAudio('DeleteBuffer');
+    PsychPortAudio('Close');
+end
+
+finish; % indicate test is over
+
 
 
