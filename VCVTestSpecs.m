@@ -1,12 +1,5 @@
 function varargout = VCVTestSpecs(varargin)
 %
-%   output variables:  ** needs updating **
-%   1: test type:   'fixed' 'adaptiveup' 'adaptivedown'
-%   2: Ear(s) to test:  'B' 'L' 'R'
-%   3: Target directory: e.g., 'IEEE'
-%   4: Masker: e.g., 'SpchNz.wav'
-%   5: SNR in dB: e.g., -4,
-%   6: Listener code: e.g., LGP01
 %
 %
 % VCVTESTSPECS M-file for VCVTestSpecs.fig
@@ -119,7 +112,6 @@ if length(varargin{1})>1
             set(handles.FinalStepSize,'String',num2str(cell2mat(varargin{1}(index+1))));
         elseif strcmpi('Repetitions', varargin{1}(index))
             set(handles.Repetitions,'String',num2str(cell2mat(varargin{1}(index+1))));
-            
         elseif strcmpi('Session', varargin{1}(index))
             handles.Session = char(varargin{1}(index+1));
         elseif strcmpi('Train', varargin{1}(index))

@@ -8,7 +8,7 @@ function VCVInNoise(varargin)
 
 %% initialisations
 VERSION = 'HHL';
-player = 0; % are you using playrec? yes = 1, no = 0
+player = 1; % are you using playrec? yes = 1, no = 0
 
 warning_noise_duration = 500;         Info.warning_noise_duration = warning_noise_duration;
 NoiseRiseFall = 200;                  Info.NoiseRiseFall = NoiseRiseFall;
@@ -30,9 +30,10 @@ mInputArgs = varargin;
 
 %% Get audio device ID based on the USB name of the device.
 if player == 1 % if you're using playrec
-    %dev = playrec('getDevices');
-    playDeviceInd = 50; % RME FireFace channels 3+4
-    recDeviceInd = 50;
+    dev = playrec('getDevices');
+    d = find( cellfun(@(x)isequal(x,'ASIO Fireface USB'),{dev.name}) ); % find device of interest - RME FireFace channels 3+4
+    playDeviceInd = dev(d).deviceID; 
+    recDeviceInd = dev(d).deviceID;
 end
 
 %% get essential information for running a test
@@ -116,7 +117,7 @@ if ~strcmpi(SNR_adj_file, 'none')  % Read in list of SNR adjustments for specifi
 end
 
 %% Settings for level
-[InRMS, OutRMS] = SetLevels(VolumeSettingsFile); % 0 here means not babyface
+[InRMS, OutRMS] = SetLevels(VolumeSettingsFile); 
 
 % Info.SoundMasterLevel = SoundMasterLevel;
 % Info.SoundWaveLevel = SoundWaveLevel;
@@ -236,7 +237,15 @@ nominal_SNR_dB = SNR_dB;
 
 %% wait to start
 Image = imread('flowers.jpg','jpg');
-GoOrMessageButton('String', 'Here we go!', Image)
+% extract level from VolumeSettingsFile
+Num = regexp(VolumeSettingsFile,'\d');
+Level = VolumeSettingsFile(Num);
+% Print appropriate message on Go button
+if str2double(Level) < 60
+    GoOrMessageButton('String', 'This will be rather quiet', Image)
+else
+    GoOrMessageButton('String', 'This will be fairly loud', Image)
+end
 
 %% run the test (do adaptive tracking until stop criterion)
 while (num_turns<FINAL_TURNS  && limit<=MaxBumps && trial<n_trials)
@@ -392,7 +401,6 @@ while (num_turns<FINAL_TURNS  && limit<=MaxBumps && trial<n_trials)
     % intialize playrec
     if player == 1 % if you're using playrec
         if playrec('isInitialised')
-            fprintf('Resetting playrec as previously initialised\n');
             playrec('reset');
         end
         playrec('init', Fs, playDeviceInd, recDeviceInd);
@@ -413,10 +421,6 @@ while (num_turns<FINAL_TURNS  && limit<=MaxBumps && trial<n_trials)
     
     % extract talker from stimulus filename (assumes this is coded
     tlk = StimulusFile(length(StimulusFile)-1:length(StimulusFile));
-    
-    % extract level from 
-    Num = regexp(VolumeSettingsFile,'\d');
-    Level = VolumeSettingsFile(Num);
     
     fout = fopen(OutFile, 'at');
     % print out relevant information
@@ -563,11 +567,11 @@ end
 set(0,'ShowHiddenHandles','on');
 delete(findobj('Type','figure'));
 
-if player == 1
-    % close psych toolbox audio
-    PsychPortAudio('DeleteBuffer');
-    PsychPortAudio('Close');
-end
+% if player == 1
+%     % close psych toolbox audio
+%     PsychPortAudio('DeleteBuffer');
+%     PsychPortAudio('Close');
+% end
 
 finish; % indicate test is over
 

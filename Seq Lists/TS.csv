@@ -1,0 +1,2 @@
+nBlocks,nPractice,TestType,ear,TargetDirectory,SNR_dB,NoiseFile,VolumeSettingsFile,itd_invert,lateralize
+1,0,adaptiveDown,B,VCV_KM&TG,8,Maskers\SpNz44100.wav,VolumeSettings.txt,none,none
