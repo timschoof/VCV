@@ -236,16 +236,9 @@ pause(1);
 nominal_SNR_dB = SNR_dB;
 
 %% wait to start
-Image = imread('flowers.jpg','jpg');
-% extract level from VolumeSettingsFile
-Num = regexp(VolumeSettingsFile,'\d');
-Level = VolumeSettingsFile(Num);
+Image = imread('DP119115(640x472).jpg','jpg');
 % Print appropriate message on Go button
-if str2double(Level) < 60
-    GoOrMessageButton('String', 'This will be rather quiet', Image)
-else
-    GoOrMessageButton('String', 'This will be fairly loud', Image)
-end
+GoOrMessageButton('String', StartMessage, Image)
 
 %% run the test (do adaptive tracking until stop criterion)
 while (num_turns<FINAL_TURNS  && limit<=MaxBumps && trial<n_trials)

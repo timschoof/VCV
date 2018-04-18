@@ -1,2 +1,10 @@
-nBlocks,nPractice,TestType,ear,TargetDirectory,SNR_dB,NoiseFile,VolumeSettingsFile,itd_invert,lateralize
-1,0,adaptiveDown,B,VCV_KM&TG,8,Maskers\SpNz44100.wav,VolumeSettings.txt,none,none
+nBlocks,nPracticeTrials,TestType,ear,TargetDirectory,SNR_dB,NoiseFile,VolumeSettingsFile,itd_invert,lateralize,StartMessage
+0,1,adaptiveDown,B,VCV_KM&TG,8,Maskers\SpNz44100.wav,VolumeSettings-40dBSPL.txt,inverted,signal,
+1,0,adaptiveDown,B,VCV_KM&TG,8,Maskers\SpNz44100.wav,VolumeSettings-40dBSPL.txt,none,none,This will be rather quiet
+1,0,adaptiveDown,B,VCV_KM&TG,8,Maskers\SpNz44100.wav,VolumeSettings-40dBSPL.txt,inverted,signal,This will be rather quiet
+1,0,adaptiveDown,B,VCV_KM&TG,8,Maskers\SpNz44100.wav,VolumeSettings-80dBSPL.txt,none,none,This will be fairly loud
+1,0,adaptiveDown,B,VCV_KM&TG,8,Maskers\SpNz44100.wav,VolumeSettings-40dBSPL.txt,inverted,signal,This will be rather quiet
+1,0,adaptiveDown,B,VCV_KM&TG,8,Maskers\SpNz44100.wav,VolumeSettings-80dBSPL.txt,inverted,signal,This will be fairly loud
+1,0,adaptiveDown,B,VCV_KM&TG,8,Maskers\SpNz44100.wav,VolumeSettings-80dBSPL.txt,none,none,This will be fairly loud
+1,0,adaptiveDown,B,VCV_KM&TG,8,Maskers\SpNz44100.wav,VolumeSettings-80dBSPL.txt,inverted,signal,This will be fairly loud
+1,0,adaptiveDown,B,VCV_KM&TG,8,Maskers\SpNz44100.wav,VolumeSettings-40dBSPL.txt,none,none,This will be rather quiet

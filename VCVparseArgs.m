@@ -25,6 +25,7 @@ p.addParamValue('lateralize', 'signal', @ischar); % apply ITD or inverted polari
 p.addParamValue('Train', 'test', @ischar); 
 p.addParamValue('Session', '1', @ischar);
 p.addParamValue('ITD_us', 0, @isnumeric); % ITD in microseconds (if ITD is applied) - this defaults to 0 if ITD is not applied
+p.addParamValue('StartMessage', 'none', @ischar);
 
 p.parse(ListenerName, varargin{:});
 
