@@ -8,7 +8,7 @@ function VCVInNoise(varargin)
 
 %% initialisations
 VERSION = 'HHL';
-player = 1; % are you using playrec? yes = 1, no = 0
+player = 0; % are you using playrec? yes = 1, no = 0
 
 warning_noise_duration = 500;         Info.warning_noise_duration = warning_noise_duration;
 NoiseRiseFall = 200;                  Info.NoiseRiseFall = NoiseRiseFall;
@@ -22,6 +22,7 @@ FINAL_TURNS = 15;
 n_trials = 35; % max number of trials
 MaxBumps = 3;
 tracking = 50; % tracking 50% or 71% correct
+IgnoreTrials = 3;
 mInputArgs = varargin;
 
 % % initialise the random number generator
@@ -42,7 +43,7 @@ end
 
 if nargin==0
     [TestType, ear, TargetDirectory, NoiseFile, SNR_dB, OutFile, Reps, MIN_change_dB,...
-        Session, Train, SNR_adj_file,VolumeSettingsFile,itd_invert,lateralize,ITD_us] = VCVTestSpecs(mInputArgs);
+        Session, Train, SNR_adj_file,VolumeSettingsFile,itd_invert,lateralize,ITD_us,RMEslider] = VCVTestSpecs(mInputArgs);
     
 else % pick up defaults and specified values from args
     if ~rem(nargin,2)
@@ -60,6 +61,10 @@ else % pick up defaults and specified values from args
     end
 end
 
+% extract level from VolumeSettingsFile
+Num = regexp(VolumeSettingsFile,'\d');
+Level = VolumeSettingsFile(Num);
+    
 % revert back to some default values if necessary
 if ~strcmp(ear,'B') % if signal is to be monaural
     itd_invert = 'none';
@@ -123,6 +128,21 @@ end
 % Info.SoundWaveLevel = SoundWaveLevel;
 % Info.InRMS = InRMS;
 % Info.OutRMS = OutRMS;
+
+%% Set RME Slider
+if strcmp(RMEslider,'TRUE')
+    % read in RME settings file
+    RMEsetting=robustcsvread('RMEsettings.csv');
+    % select columns with relevant info
+    LevelCol=strmatch('dBSPL',strvcat(RMEsetting{1,:}));
+    SliderCol=strmatch('slider',strvcat(RMEsetting{1,:}));
+    % find index of dBSPL level
+    index = find(strcmp({RMEsetting{:,LevelCol}}, num2str(Level)));
+    % find the corresponding RME slider setting
+    RMEattn = RMEsetting{index,SliderCol};
+    % set RME slider
+    SetMainSlider(str2double(RMEattn))
+end
 
 %% create output files
 status = mkdir(OutputDir);
@@ -421,64 +441,66 @@ while (num_turns<FINAL_TURNS  && limit<=MaxBumps && trial<n_trials)
     fprintf(fout, '\n%s,%s,%s,%d,%d,%s,%s,%+5.1f,%+5.1f,%+5.1f,%s,%s,%s,%+5.1f,%s,%s,%s,%s,%s,%d,%s', ...
         ListenerName,StartDate,StartTimeString,tracking,trial,TargetDirectory,tlk,nominal_SNR_dB,SNR_dB,...
         OutLevelChange,Level,itd_invert,lateralize,ITD_us,NoiseFileName,InFile,InFile(1),consonant,response,correct,TimeOfResponse);
+    fclose(fout);
     
     %% feedback here if training
-    if strcmpi(Train, 'train');
+    if strcmpi(Train, 'train')
         VCVFeedback(correct, InFile, consonant, response, y, Fs, OutRMS);
     end
     
     %%  adaptive down procedure
     if ~strcmpi(TestType,'fixed')
-        %% mark the direction and adjust correct_count
-        if correct
-            correct_count = correct_count + 1;
-            
-            if correct_count == criterion
-                current_change = -1;
-                next_nominal_SNR = nominal_SNR_dB +  change*current_change;
-                correct_count = 0;
+        % ignore initial errors
+        if ((trial>IgnoreTrials) || correct) % do the normal thing
+            %% mark the direction and adjust correct_count
+            if correct
+                correct_count = correct_count + 1;
+
+                if correct_count == criterion
+                    current_change = -1;
+                    next_nominal_SNR = nominal_SNR_dB +  change*current_change;
+                    correct_count = 0;
+                else
+                    next_nominal_SNR = nominal_SNR_dB;
+                end
             else
-                next_nominal_SNR = nominal_SNR_dB;
+                current_change = 1;
+                correct_count = 0;
+                next_nominal_SNR = nominal_SNR_dB +  change*current_change;
+            end
+
+            % are we at a turnaround? If so, do a few things
+            if (previous_change ~= current_change)
+                % reduce step proportion if not minimum */
+                if ((change-0.001) > MIN_change_dB) % allow for rounding error
+                    change = change-inc;
+                else % final turnarounds, so start keeping a tally
+                    num_turns = num_turns + 1;
+                    reversals(num_turns) = nominal_SNR_dB;
+                    fprintf(fout,',*');
+                end
+                % reset change indicator and count of correct responses
+                previous_change = current_change;
+                criterion = final_criterion;
+            end
+
+            % record all levels visted over final reversals
+            if num_turns
+                levels_count = levels_count + 1;
+                levels_visited(levels_count) = nominal_SNR_dB;
+            end
+
+            %% set level for next trial
+            nominal_SNR_dB = next_nominal_SNR;
+
+            % ensure that the current level is within the possible range and keep track of hitting the endpoints
+            if nominal_SNR_dB>MAX_SNR_dB
+                nominal_SNR_dB = MAX_SNR_dB;
+                limit = limit+1;
             end
         else
-            current_change = 1;
-            correct_count = 0;
-            next_nominal_SNR = nominal_SNR_dB +  change*current_change;
+            totalCorrect = totalCorrect + correct;
         end
-        
-        % are we at a turnaround? If so, do a few things
-        if (previous_change ~= current_change)
-            % reduce step proportion if not minimum */
-            if ((change-0.001) > MIN_change_dB) % allow for rounding error
-                change = change-inc;
-            else % final turnarounds, so start keeping a tally
-                num_turns = num_turns + 1;
-                reversals(num_turns) = nominal_SNR_dB;
-                fprintf(fout,',*');
-            end
-            % reset change indicator and count of correct responses
-            previous_change = current_change;
-            criterion = final_criterion;
-        end
-        
-        fclose(fout);
-        
-        % record all levels visted over final reversals
-        if num_turns
-            levels_count = levels_count + 1;
-            levels_visited(levels_count) = nominal_SNR_dB;
-        end
-        
-        %% set level for next trial
-        nominal_SNR_dB = next_nominal_SNR;
-        
-        % ensure that the current level is within the possible range and keep track of hitting the endpoints
-        if nominal_SNR_dB>MAX_SNR_dB
-            nominal_SNR_dB = MAX_SNR_dB;
-            limit = limit+1;
-        end
-    else
-        totalCorrect = totalCorrect + correct;
     end
 end  % end of a single trial */
 

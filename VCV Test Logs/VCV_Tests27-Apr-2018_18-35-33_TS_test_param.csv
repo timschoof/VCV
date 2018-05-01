@@ -1,0 +1,2 @@
+warning_noise_duration,NoiseRiseFall,TestType,MAX_SNR_dB,PermuteMaskerWave,START_change_dB,MIN_change_dB,INITIAL_TURNS,FINAL_TURNS,MaxBumps,SNR_adj_file,date,time
+500,200,adaptiveDown,15,0,8,2,2,15,3,VCV_adjust_SNR_KM&TG.csv,27-Apr-2018,18-35-33
