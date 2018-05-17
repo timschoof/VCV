@@ -582,11 +582,11 @@ end
 set(0,'ShowHiddenHandles','on');
 delete(findobj('Type','figure'));
 
-% if player == 1
-%     % close psych toolbox audio
-%     PsychPortAudio('DeleteBuffer');
-%     PsychPortAudio('Close');
-% end
+if player==1
+    if playrec('isInitialised')
+        playrec('reset');
+    end
+end
 
 finish; % indicate test is over
 
