@@ -8,7 +8,7 @@ function VCVInNoise(varargin)
 
 %% initialisations
 VERSION = 'HHL';
-player = 0; % are you using playrec? yes = 1, no = 0
+player = 1; % are you using playrec? yes = 1, no = 0
 
 warning_noise_duration = 500;         Info.warning_noise_duration = warning_noise_duration;
 NoiseRiseFall = 200;                  Info.NoiseRiseFall = NoiseRiseFall;
@@ -60,10 +60,6 @@ else % pick up defaults and specified values from args
         end
     end
 end
-
-% extract level from VolumeSettingsFile
-Num = regexp(VolumeSettingsFile,'\d');
-Level = VolumeSettingsFile(Num);
     
 % revert back to some default values if necessary
 if ~strcmp(ear,'B') % if signal is to be monaural
@@ -128,6 +124,11 @@ end
 % Info.SoundWaveLevel = SoundWaveLevel;
 % Info.InRMS = InRMS;
 % Info.OutRMS = OutRMS;
+
+% extract level from VolumeSettingsFile
+% Num = regexp(VolumeSettingsFile,'\d');
+% Level = VolumeSettingsFile(Num);
+Level = dBSPL;
 
 %% Set RME Slider
 if strcmp(RMEslider,'TRUE')
@@ -477,7 +478,9 @@ while (num_turns<FINAL_TURNS  && limit<=MaxBumps && trial<n_trials)
                 else % final turnarounds, so start keeping a tally
                     num_turns = num_turns + 1;
                     reversals(num_turns) = nominal_SNR_dB;
+                    fout = fopen(OutFile, 'at');
                     fprintf(fout,',*');
+                    fclose(fout);
                 end
                 % reset change indicator and count of correct responses
                 previous_change = current_change;
@@ -512,7 +515,7 @@ EndTimeString=sprintf('%02d:%02d:%02d',EndTime(4),EndTime(5),EndTime(6));
 
 %% output summary statistics
 fout = fopen(SummaryOutFile, 'at');
-fprintf(fout, 'listener,date,sTime,endTime,TestType,tracking,SentType,stimuli,noise,VolumeSettings,manipulation,lateralised,ITD,version');
+fprintf(fout, 'listener,date,sTime,endTime,TestType,tracking,SentType,stimuli,noise,dBSPL,manipulation,lateralised,ITD,version');
 % adaptive procedures
 if ~strcmp(TestType,'fixed')
     fprintf(fout, ',finish,uRevs,sdRevs,nRevs,nTrials,uLevs,sdLevs');
@@ -554,7 +557,7 @@ else % fixed test
     fprintf(fout, ',SNR,nCorrect,nKW,pCorrect');
     fprintf(fout, '\n%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%+5.1f,%s', ...
         ListenerName,StartDate,StartTimeString,EndTimeString,...
-        TestType,TargetType,TargetDirectory,NoiseFileName,VolumeSettingsFile,itd_invert,lateralize,ITD_us,VERSION);
+        TestType,TargetType,TargetDirectory,NoiseFileName,Level,itd_invert,lateralize,ITD_us,VERSION);
     
     fprintf(fout, ',%g,%d,%d,%f', nominal_SNR_dB,totalCorrect, trial, totalCorrect/trial);
 end

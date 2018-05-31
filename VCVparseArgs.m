@@ -27,6 +27,7 @@ p.addParamValue('Session', '1', @ischar);
 p.addParamValue('ITD_us', 0, @isnumeric); % ITD in microseconds (if ITD is applied) - this defaults to 0 if ITD is not applied
 p.addParamValue('StartMessage', 'none', @ischar);
 p.addParameter('RMEslider','TRUE',@ischar); % ajust sliders on RME TotalMix if necesary - TRUE or FALSE
+p.addParameter('dBSPL',80,@isnumeric); % dB SPL stimulus level (related to the slider settings)
 
 p.parse(ListenerName, varargin{:});
 
