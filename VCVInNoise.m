@@ -26,7 +26,7 @@ IgnoreTrials = 3;
 mInputArgs = varargin;
 
 % % initialise the random number generator
-% rng('shuffle');
+rng('shuffle');
 % warning('off', 'MATLAB:fileparts:VersionToBeRemoved')
 
 %% Get audio device ID based on the USB name of the device.
