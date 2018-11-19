@@ -28,7 +28,7 @@ p.addParamValue('ITD_us', 0, @isnumeric); % ITD in microseconds (if ITD is appli
 p.addParamValue('StartMessage', 'none', @ischar);
 p.addParameter('RMEslider','TRUE',@ischar); % ajust sliders on RME TotalMix if necesary - TRUE or FALSE
 p.addParameter('dBSPL',80,@isnumeric); % dB SPL stimulus level (related to the slider settings)
-
+p.addParameter('n_trials', 35, @isnumeric); % max trials
 p.parse(ListenerName, varargin{:});
 
 SpecifiedArgs=p.Results;

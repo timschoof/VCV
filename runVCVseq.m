@@ -13,7 +13,7 @@ nBlockIndex=strmatch('nBlocks',strvcat(SS{1,:}));
 if nBlockIndex>1
     error('nBlocks, the number of blocks to run must be in the first column');
 end
-nPracticeTrialsIndex=strmatch('nPracticeTrials',strvcat(SS{1,:}));
+nPracticeTrialsIndex=strmatch('nPractice',strvcat(SS{1,:}));
 if nPracticeTrialsIndex~=2
     error('nPracticeTrials, the number of practice trials to run must be in the second column');
 end

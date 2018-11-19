@@ -11,7 +11,7 @@ VERSION = 'HHL';
 player = 1; % are you using playrec? yes = 1, no = 0
 
 warning_noise_duration = 500;         Info.warning_noise_duration = warning_noise_duration;
-NoiseRiseFall = 200;                  Info.NoiseRiseFall = NoiseRiseFall;
+NoiseRiseFall = 100;                  Info.NoiseRiseFall = NoiseRiseFall;
 OutputDir = 'VCV_results';
 MAX_SNR_dB = 15;
 PermuteMaskerWave = 0;      % minimise repeated playing of sections of masker wav
@@ -165,11 +165,11 @@ StartDate = date;
 
 % put method, date and time on filenames so as to ensure a single file per test
 if strcmp(itd_invert,'ITD')
-    FileListenerName=[ListenerName '_T-' TargetDirectory '_M-' NoiseFileName(1:3) '_' num2str(ITD_us) 'us_' itd_invert '_' lateralize '_' StartDate '_' FileNamingStartTime];
+    FileListenerName=[ListenerName '_' num2str(Level) '_T-' TargetDirectory '_M-' NoiseFileName(1:3) '_' num2str(ITD_us) 'us_' itd_invert '_' lateralize '_' StartDate '_' FileNamingStartTime];
 elseif strcmp(itd_invert,'inverted')
-    FileListenerName=[ListenerName '_T-' TargetDirectory '_M-' NoiseFileName(1:3) '_' itd_invert '_' lateralize '_' StartDate '_' FileNamingStartTime];
+    FileListenerName=[ListenerName '_' num2str(Level) '_T-' TargetDirectory '_M-' NoiseFileName(1:3) '_' itd_invert '_' lateralize '_' StartDate '_' FileNamingStartTime];
 elseif strcmp(itd_invert,'none')
-    FileListenerName=[ListenerName '_T-' TargetDirectory '_M-' NoiseFileName(1:3) '_' itd_invert '_' StartDate '_' FileNamingStartTime];
+    FileListenerName=[ListenerName '_' num2str(Level) '_T-' TargetDirectory '_M-' NoiseFileName(1:3) '_' itd_invert '_' StartDate '_' FileNamingStartTime];
 end
 OutFile = fullfile(OutputDir, [FileListenerName '.csv']);
 SummaryOutFile = fullfile(OutputDir, [FileListenerName '_sum.csv']);
@@ -441,7 +441,7 @@ while (num_turns<FINAL_TURNS  && limit<=MaxBumps && trial<n_trials)
     % fprintf(fout, 'listener,date,sTime,trial,targets,SNR,adj_SNR,OutLevelChange,VolumeSettings,masker,wave,V,C,response,correct,rTime,rev');
     fprintf(fout, '\n%s,%s,%s,%d,%d,%s,%s,%+5.1f,%+5.1f,%+5.1f,%s,%s,%s,%+5.1f,%s,%s,%s,%s,%s,%d,%s', ...
         ListenerName,StartDate,StartTimeString,tracking,trial,TargetDirectory,tlk,nominal_SNR_dB,SNR_dB,...
-        OutLevelChange,Level,itd_invert,lateralize,ITD_us,NoiseFileName,InFile,InFile(1),consonant,response,correct,TimeOfResponse);
+        OutLevelChange,num2str(Level),itd_invert,lateralize,ITD_us,NoiseFileName,InFile,InFile(1),consonant,response,correct,TimeOfResponse);
     fclose(fout);
     
     %% feedback here if training
@@ -521,7 +521,7 @@ if ~strcmp(TestType,'fixed')
     fprintf(fout, ',finish,uRevs,sdRevs,nRevs,nTrials,uLevs,sdLevs');
     fprintf(fout, '\n%s,%s,%s,%s,%s,%d,%s,%s,%s,%s,%s,%s,%+5.1f,%s', ...
         ListenerName,StartDate,StartTimeString,EndTimeString,...
-        TestType,tracking,TargetType,TargetDirectory,NoiseFileName,Level,itd_invert,lateralize,ITD_us,VERSION);
+        TestType,tracking,TargetType,TargetDirectory,NoiseFileName,num2str(Level),itd_invert,lateralize,ITD_us,VERSION);
     
     % print out summary statistics -- how did we get here?
     if (limit>=3) % bumped up against the limits
@@ -591,7 +591,7 @@ if player==1
     end
 end
 
-finish; % indicate test is over
+% finish; % indicate test is over
 
 
 
