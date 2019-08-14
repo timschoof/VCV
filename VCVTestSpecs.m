@@ -1,12 +1,5 @@
 function varargout = VCVTestSpecs(varargin)
 %
-%   output variables:  ** needs updating **
-%   1: test type:   'fixed' 'adaptiveup' 'adaptivedown'
-%   2: Ear(s) to test:  'B' 'L' 'R'
-%   3: Target directory: e.g., 'IEEE'
-%   4: Masker: e.g., 'SpchNz.wav'
-%   5: SNR in dB: e.g., -4,
-%   6: Listener code: e.g., LGP01
 %
 %
 % VCVTESTSPECS M-file for VCVTestSpecs.fig
@@ -115,11 +108,16 @@ if length(varargin{1})>1
             else
                 set(handles.fixed,'Value',1)
             end
+        elseif strcmpi('RMEslider', varargin{1}(index))
+            if strcmpi('Slide', char(varargin{1}(index+1)))
+                set(handles.adaptiveUp,'Value',1);
+            else
+                set(handles.fixed,'noSlide',1)
+            end
         elseif strcmpi('FinalStep', varargin{1}(index))
             set(handles.FinalStepSize,'String',num2str(cell2mat(varargin{1}(index+1))));
         elseif strcmpi('Repetitions', varargin{1}(index))
             set(handles.Repetitions,'String',num2str(cell2mat(varargin{1}(index+1))));
-            
         elseif strcmpi('Session', varargin{1}(index))
             handles.Session = char(varargin{1}(index+1));
         elseif strcmpi('Train', varargin{1}(index))
@@ -185,6 +183,7 @@ varargout{12} = handles.VolumeSettingsFile;
 varargout{13} = handles.itd_invert;
 varargout{14} = handles.lateralize;
 varargout{15} = handles.itd_us;
+varargout{16} = handles.RMEslider;
 
 % The figure can be deleted now
 delete(handles.figure1);
@@ -324,6 +323,11 @@ elseif get(handles.adaptiveDown,'Value')
     handles.AorF='adaptiveDown';
 else
     handles.AorF='fixed';
+end
+if get(handles.Slide,'Value')
+    handles.RMEslider='TRUE';
+elseif get(handles.noSlide,'Value')
+    handles.RMEslider='FALSE';
 end
 if get(handles.B,'Value')
     handles.Ear='B';

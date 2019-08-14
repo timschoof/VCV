@@ -1,0 +1,6 @@
+nBlocks,nPractice,TestType,ear,TargetDirectory,SNR_dB,NoiseFile,itd_invert,lateralize,dBSPL,StartMessage,n_trials
+1,0,adaptiveDown,B,VCV_KM&TG,8,Maskers\SpNz44100_8kHz.wav,inverted,signal,40,This will be rather quiet,35
+1,0,adaptiveDown,B,VCV_KM&TG,8,Maskers\SpNz44100_8kHz.wav,inverted,signal,80,This will be fairly loud,35
+1,0,adaptiveDown,B,VCV_KM&TG,8,Maskers\SpNz44100_8kHz.wav,none,none,80,This will be fairly loud,35
+1,0,adaptiveDown,B,VCV_KM&TG,8,Maskers\SpNz44100_8kHz.wav,inverted,signal,80,This will be fairly loud,35
+1,0,adaptiveDown,B,VCV_KM&TG,8,Maskers\SpNz44100_8kHz.wav,none,none,40,This will be rather quiet,35
